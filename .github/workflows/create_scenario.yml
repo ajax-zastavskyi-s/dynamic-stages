@@ -1,0 +1,38 @@
+name: Run Python Script on Folder Commit
+
+on:
+  push:
+    paths:
+      - 'bdd_scenarios/**'
+
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements.txt
+
+    - name: Run Python script
+      run: |
+        python -m behave --no-capture bdd_scenarios/
+
+    - name: Push generated scenario
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add scenarios
+        git commit -m "Add new scenario"
+        git push origin HEAD:main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
