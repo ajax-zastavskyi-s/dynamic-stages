@@ -23,38 +23,6 @@ def getStages() {
                 }
             }
         ],
-        [
-            name: "Deploy user-svc 123.RELEASE",
-            steps: {
-                script {
-                    rc_testing.deployService(
-                        serviceName: "user-svc",
-                        serviceVersion: "123.RELEASE"
-                    )
-                }
-            }
-        ],
-        [
-            name: "Deploy csa-svc 125.RELEASE",
-            steps: {
-                script {
-                    rc_testing.deployService(
-                        serviceName: "csa-svc",
-                        serviceVersion: "125.RELEASE"
-                    )
-                }
-            }
-        ],
-        [
-            name: "Run BDD tests",
-            steps: {
-                script {
-                    rc_testing.runBDDTests(
-                        marks: Empty
-                    )
-                }
-            }
-        ],
     ]
 }
 
