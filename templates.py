@@ -19,8 +19,8 @@ DEPLOY_SVC_TEMPLATE = Template("""
             steps: {
                 script {
                     rc_testing.deployService(
-                        serviceName: "$service_name",
-                        serviceVersion: "$service_version"
+                        serviceName="$service_name",
+                        serviceVersion="$service_version"
                     )
                 }
             }
@@ -34,7 +34,7 @@ RUN_BDD_TESTS_TEMPLATE = Template("""
             steps: {
                 script {
                     rc_testing.runBDDTests(
-                        marks: $marks
+                        marks=$marks
                     )
                 }
             }
