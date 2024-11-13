@@ -1,4 +1,4 @@
-name: Run Python Script on Folder Commit
+name: Generate groovy files based on BDD scenarios
 
 on:
   push:
@@ -45,7 +45,7 @@ jobs:
         git config user.email "github-actions@github.com"
         git add scenarios
 
-        git commit -m "Add new scenarios"
+        git commit -m '${{ github.event.head_commit.message }}'
         git push origin HEAD:main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
