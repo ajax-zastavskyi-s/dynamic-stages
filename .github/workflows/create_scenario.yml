@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'bdd_scenarios/**'
+    branches:
+      - main
 
 jobs:
-  run-python-script:
+  generate-groovy-file:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,35 +25,27 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -r requirements.txt
 
-    - name: Get names of changed files
-      id: changed_files
-      env:
-        CHANGED_SCENARIOS: $(git diff --name-only ${{ github.sha }} | grep '^bdd_scenarios/.*\.feature$')
+    - name: Get files changed in last commit
+      uses: tj-actions/changed-files@v45
+      id: changed-files
+
+    - name: Generate groovy files from BDD scenarios
       run: |
-        echo "Changed scenarios:"
-        echo "$CHANGED_SCENARIOS"
+        ALL_CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
 
-        # Set the output variable for later use
-#        echo "::set-output name=changed_scenarios::$CHANGED_SCENARIOS"
+        for file in $ALL_CHANGED_FILES; do
+          if [[ "$file" =~ bdd_scenarios/.*\.feature$ ]]; then
+            python -m behave --no-capture "$file"
+          fi
+        done
 
-#    - name: Run Behave on Changed Scenarios
-#      run: |
-#        echo "${{ steps.changed_files.outputs.changed_scenarios }}"
-#        if [[ -n "${{ steps.changed_files.outputs.changed_scenarios }}" ]]; then
-#          # Run behave on each changed scenario
-#          echo "Running Behave for scenarios: ${{ steps.changed_files.outputs.changed_scenarios }}"
-#          python -m behave --no-capture ${{ steps.changed_files.outputs.changed_scenarios }}
-#        else
-#          echo "No changed .feature files to run behave for"
-#        fi
+    - name: Push generated groovy scenarios to repository
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add scenarios
 
-#    - name: Push generated scenarios
-#      run: |
-#        git config user.name "github-actions"
-#        git config user.email "github-actions@github.com"
-#        git add scenarios
-#      # handle exit code 1 here
-#        git commit -m "Add new scenarios for $CHANGED_SCENARIOS"
-#        git push origin HEAD:main
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        git commit -m "Add new scenarios"
+        git push origin HEAD:main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

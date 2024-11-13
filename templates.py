@@ -33,7 +33,9 @@ RUN_BDD_TESTS_TEMPLATE = Template("""
             name: "$stage_name",
             steps: {
                 script {
-                    rc_testing.runBDDTests()
+                    rc_testing.runBDDTests(
+                        marks: $marks
+                    )
                 }
             }
         ],

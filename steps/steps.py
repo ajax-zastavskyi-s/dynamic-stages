@@ -20,9 +20,14 @@ def step_deploy_service(context, service_name, params):
 
 @then('Run BDD tests with parameters {params}')
 def step_run_bdd_tests(context, params):
+    params = json.loads(params)
     stage_name = "Run BDD tests"
     if marks := params.get("marks"):
         stage_name = f"{stage_name} {marks}"
+    else:
+        marks = "Empty"
+
     context.stages.append(RUN_BDD_TESTS_TEMPLATE.safe_substitute(
         stage_name=stage_name,
+        marks=marks,
     ).strip("\n"))
