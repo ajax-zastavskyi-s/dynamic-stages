@@ -2,6 +2,8 @@ from string import Template
 
 BASE_GROOVY_TEMPLATE = Template("""
 def getStages() {
+    rc_testing = load("rollout_stage/jenkins/rc_testing.groovy")
+
     return [
 $stages
     ]
@@ -24,20 +26,7 @@ DEPLOY_SVC_TEMPLATE = Template("""
             }
         ],
 """)
-SET_FF_TEMPLATE = Template("""
-        [
-            name: "$stage_name",
-            steps: {
-                script {
-                    rc_testing.setToggleState(
-                        toggleName: "$name",
-                        serviceName: "service",
-                        toggleState: "$state"
-                    )
-                }
-            }
-        ],
-""")
+
 
 RUN_BDD_TESTS_TEMPLATE = Template("""
         [

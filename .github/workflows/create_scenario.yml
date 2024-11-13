@@ -23,16 +23,35 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -r requirements.txt
 
-    - name: Run Python script
-      run: |
-        python -m behave --no-capture bdd_scenarios/
-
-    - name: Push generated scenario
-      run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-        git add scenarios
-        git commit -m "Add new scenario"
-        git push origin HEAD:main
+    - name: Get names of changed files
+      id: changed_files
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CHANGED_SCENARIOS: $(git diff --name-only ${{ github.sha }} | grep '^bdd_scenarios/.*\.feature$')
+      run: |
+        echo "Changed scenarios:"
+        echo "$CHANGED_SCENARIOS"
+
+        # Set the output variable for later use
+#        echo "::set-output name=changed_scenarios::$CHANGED_SCENARIOS"
+
+#    - name: Run Behave on Changed Scenarios
+#      run: |
+#        echo "${{ steps.changed_files.outputs.changed_scenarios }}"
+#        if [[ -n "${{ steps.changed_files.outputs.changed_scenarios }}" ]]; then
+#          # Run behave on each changed scenario
+#          echo "Running Behave for scenarios: ${{ steps.changed_files.outputs.changed_scenarios }}"
+#          python -m behave --no-capture ${{ steps.changed_files.outputs.changed_scenarios }}
+#        else
+#          echo "No changed .feature files to run behave for"
+#        fi
+
+#    - name: Push generated scenarios
+#      run: |
+#        git config user.name "github-actions"
+#        git config user.email "github-actions@github.com"
+#        git add scenarios
+#      # handle exit code 1 here
+#        git commit -m "Add new scenarios for $CHANGED_SCENARIOS"
+#        git push origin HEAD:main
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

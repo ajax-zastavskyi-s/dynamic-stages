@@ -1,4 +1,4 @@
-from templates.templates import BASE_GROOVY_TEMPLATE
+from templates import BASE_GROOVY_TEMPLATE
 
 
 def before_scenario(context, scenario):
