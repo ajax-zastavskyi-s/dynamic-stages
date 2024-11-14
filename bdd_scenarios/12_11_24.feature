@@ -7,4 +7,5 @@ Feature: Showing off behave
     When Deploy service "external-device-svc" with parameters {"version": "123.RELEASE"}
     When Deploy service "csa" with parameters {"version": "123.RELEASE"}
     When Deploy service "mobile-gw-svc" with parameters {"version": "123.RELEASE"}
+    When Deploy service "space-svc" with parameters {"version": "123.RELEASE"}
     Then Run BDD tests with parameters {"marks": "smart_home"}
