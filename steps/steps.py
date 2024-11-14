@@ -1,6 +1,7 @@
 from behave import step, then
 import json
 
+from helpers import render_template
 from templates import DEPLOY_SVC_TEMPLATE, RUN_BDD_TESTS_TEMPLATE
 
 
@@ -10,12 +11,18 @@ def step_deploy_service(context, service_name, params):
     params = json.loads(params)
     version = params.get("version")
 
-    stage = DEPLOY_SVC_TEMPLATE.safe_substitute(
+    stage_passed_variable = f"deploy_{service_name.lower().replace('-', '_')}_passed"
+
+    stage = render_template(
+        template=DEPLOY_SVC_TEMPLATE,
         stage_name=f"Deploy {service_name} {version}",
         service_name=service_name,
-        service_version=version
-    ).strip("\n")
+        service_version=version,
+        stagePassedVariable=stage_passed_variable,
+    )
     context.stages.append(stage)
+
+    context.dependent_stages_results_variables.append(stage_passed_variable)
 
 
 @then('Run BDD tests with parameters {params}')
@@ -27,7 +34,11 @@ def step_run_bdd_tests(context, params):
     else:
         marks = "Empty"
 
-    context.stages.append(RUN_BDD_TESTS_TEMPLATE.safe_substitute(
+    stage = render_template(
+        template=RUN_BDD_TESTS_TEMPLATE,
         stage_name=stage_name,
-        marks=marks,
-    ).strip("\n"))
+        marks=marks
+    )
+    context.stages.append(stage)
+
+    context.dependent_stages_results_variables = []
