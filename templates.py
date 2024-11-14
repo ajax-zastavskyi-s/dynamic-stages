@@ -26,7 +26,7 @@ DEPLOY_SVC_TEMPLATE = Template("""
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
-                    if (dynamicStagesResults.every { stage_passed.value == true }) {
+                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         dynamicStagesResults['$stage_passed_variable'] = rc_testing.deployService(
                             serviceName="$service_name",
                             serviceVersion="$service_version"
@@ -51,7 +51,7 @@ GENERATE_SETUPS_TEMPLATE = Template("""
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
 
-                    if (dynamicStagesResults.every { stage_passed.value == true }) {
+                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         dynamicStagesResults['$stage_passed_variable'] = rc_testing.generateSetups()
                     }
                     else {
@@ -95,7 +95,7 @@ RUN_BDD_TESTS_TEMPLATE = Template("""
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
 
-                    if (dynamicStagesResults.every { stage_passed.value == true }) {
+                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks=$marks
                         )
