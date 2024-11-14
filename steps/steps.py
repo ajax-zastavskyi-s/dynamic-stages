@@ -2,7 +2,8 @@ from behave import step, then
 import json
 
 from helpers import render_template
-from templates import DEPLOY_SVC_TEMPLATE, RUN_BDD_TESTS_TEMPLATE
+from templates import DEPLOY_SVC_TEMPLATE, RUN_BDD_TESTS_TEMPLATE, GENERATE_SETUPS_TEMPLATE, RESPAWN_ACTORS_TEMPLATE, \
+    UNLOCK_SETUPS_TEMPLATE
 
 
 @step('Deploy service "{service_name}" with parameters {params}')
@@ -18,7 +19,7 @@ def step_deploy_service(context, service_name, params):
         stage_name=f"Deploy {service_name} {version}",
         service_name=service_name,
         service_version=version,
-        stagePassedVariable=stage_passed_variable,
+        stage_passed_variable=stage_passed_variable,
     )
     context.stages.append(stage)
 
@@ -34,11 +35,32 @@ def step_run_bdd_tests(context, params):
     else:
         marks = "Empty"
 
-    stage = render_template(
+    generate_setups_stage = render_template(
+        GENERATE_SETUPS_TEMPLATE,
+        stage_name="Generate setups",
+        stage_passed_variable="generation_passed",
+    )
+    respawn_actors_stage = render_template(
+        template=RESPAWN_ACTORS_TEMPLATE,
+        stage_name="Respawn actors",
+    )
+    unlock_setups_stage = render_template(
+        template=UNLOCK_SETUPS_TEMPLATE,
+        stage_name="Unlock setups",
+    )
+    run_tests_stage = render_template(
         template=RUN_BDD_TESTS_TEMPLATE,
         stage_name=stage_name,
         marks=marks
     )
-    context.stages.append(stage)
+
+    context.stages.extend(
+        (
+            generate_setups_stage,
+            respawn_actors_stage,
+            unlock_setups_stage,
+            run_tests_stage,
+        )
+    )
 
     context.dependent_stages_results_variables = []

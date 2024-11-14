@@ -26,11 +26,17 @@ DEPLOY_SVC_TEMPLATE = Template("""
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
-
-                    dynamicStagesResults['$stagePassedVariable'] = rc_testing.deployService(
-                        serviceName="$service_name",
-                        serviceVersion="$service_version"
-                    )
+                    if (dynamicStagesResults.every { stage_passed.value == true }) {
+                        dynamicStagesResults['$stage_passed_variable'] = rc_testing.deployService(
+                            serviceName="$service_name",
+                            serviceVersion="$service_version"
+                        )
+                    }
+                    else {
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
+                        echo "Skip deploy due to failure: ${failedStage} == false"
+                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
+                    }
 
                     env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                 }
@@ -38,6 +44,49 @@ DEPLOY_SVC_TEMPLATE = Template("""
         ],
 """)
 
+GENERATE_SETUPS_TEMPLATE = Template("""
+        [
+            name: "$stage_name",
+            steps: {
+                script {
+                    dynamicStagesResults = getDynamicStagesResults()
+
+                    if (dynamicStagesResults.every { stage_passed.value == true }) {
+                        dynamicStagesResults['$stage_passed_variable'] = rc_testing.generateSetups()
+                    }
+                    else {
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
+                        echo "Skip setup generation due to failure: ${failedStage} == false"
+                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
+                    }
+
+                    env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
+                }
+            }
+        ],
+""")
+
+RESPAWN_ACTORS_TEMPLATE = Template("""
+    [
+        name: "$stage_name",
+        steps: {
+            script {
+                rc_testing.respawnActors()
+            }
+        }
+    ],
+""")
+
+UNLOCK_SETUPS_TEMPLATE = Template("""
+    [
+        name: "$stage_name",
+        steps: {
+            script {
+                rc_testing.unlockSetups()
+            }
+        }
+    ],
+""")
 
 RUN_BDD_TESTS_TEMPLATE = Template("""
         [
