@@ -34,7 +34,7 @@ jobs:
         ALL_CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
 
         for file in $ALL_CHANGED_FILES; do
-          if [[ "$file" =~ json_scenarios/.*\.json ]]; then
+          if [[ "$file" =~ json_scenarios/.*\.json && [[ -f "$file" ]]; then
             python generate_scenario.py --json_scenario_path="$file" 
           fi
         done
@@ -43,9 +43,13 @@ jobs:
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
-        git add scenarios
 
-        git commit -m '${{ github.event.head_commit.message }}'
-        git push origin HEAD:main
+        git add scenarios
+        if git diff --cached --quiet; then
+          echo "No changes to commit."
+        else
+          git commit -m '${{ github.event.head_commit.message }}'
+          git push origin HEAD:main
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
