@@ -67,7 +67,7 @@ RUN_BDD_TESTS_TEMPLATE = Template("""
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
-                            marks=$marks
+                            marks='$marks'
                         )
                     }
                     else {
