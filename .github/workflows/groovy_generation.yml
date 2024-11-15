@@ -32,6 +32,10 @@ jobs:
     - name: Generate groovy files from scenario representation in JSON format
       run: |
         ALL_CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
+        if [[ -z "$ALL_CHANGED_FILES" ]]; then
+          echo "No changed files"
+          exit 0
+        fi
 
         for file in $ALL_CHANGED_FILES; do
           if [[ "$file" =~ json_scenarios/.*\.json && [[ -f "$file" ]]; then
