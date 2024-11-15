@@ -3,7 +3,7 @@ name: Generate groovy files based on BDD scenarios
 on:
   push:
     paths:
-      - 'bdd_scenarios/**'
+      - 'json_scenarios/**'
     branches:
       - main
 
@@ -29,13 +29,13 @@ jobs:
       uses: tj-actions/changed-files@v45
       id: changed-files
 
-    - name: Generate groovy files from BDD scenarios
+    - name: Generate groovy files from scenario representation in JSON format
       run: |
         ALL_CHANGED_FILES="${{ steps.changed-files.outputs.all_changed_files }}"
 
         for file in $ALL_CHANGED_FILES; do
-          if [[ "$file" =~ bdd_scenarios/.*\.feature$ ]]; then
-            python -m behave --no-capture "$file"
+          if [[ "$file" =~ json_scenarios/.*\.json ]]; then
+            python generate_scenario.py --json_scenario_path="$file" 
           fi
         done
 
