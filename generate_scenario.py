@@ -67,8 +67,8 @@ class RCGroovyScenarioBuilder:
 
 def generate_groovy_file(json_scenario: dict):
     builder = RCGroovyScenarioBuilder(
-        scenario_name=json_scenario["scenario_name"],
-        scenario_date=json_scenario["date"]
+        scenario_name=json_scenario["name"],
+        scenario_date=json_scenario["date"],
     )
 
     for stage in json_scenario["stages"]:
