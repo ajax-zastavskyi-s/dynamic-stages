@@ -22,9 +22,8 @@ def step_deploy_service(context, service_name, params):
         service_version=version,
         stage_passed_variable=stage_passed_variable,
     )
-    context.stages.append(stage)
 
-    context.dependent_stages_results_variables.append(stage_passed_variable)
+    context.stages.append(stage)
 
 
 @then('Run BDD tests with parameters {params}')
@@ -44,4 +43,3 @@ def step_run_bdd_tests(context, params):
     )
 
     context.stages.append(run_tests_stage)
-    context.dependent_stages_results_variables = []

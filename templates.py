@@ -76,7 +76,7 @@ RUN_BDD_TESTS_TEMPLATE = Template("""
                         Utils.markStageSkippedForConditional(env.STAGE_NAME)
                     }
 
-                    env.dynamicStagesResults = null
+                    env.dynamicStagesResults = ""
                 }
             }
         ],
