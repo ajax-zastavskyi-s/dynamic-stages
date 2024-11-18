@@ -61,9 +61,11 @@ def getStages() {
                     
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         dynamicStagesResults['setup_generation_passed'] = rc_testing.generateSetups()
-                        script {
-                            rc_testing.respawnActors()
-                            rc_testing.unlockRegressSetups()
+                        if (dynamicStagesResults['setup_generation_passed'])
+                            script {
+                                rc_testing.respawnActors()
+                                rc_testing.unlockRegressSetups()
+                            }
                         }
                     }
                     else {
@@ -116,9 +118,11 @@ def getStages() {
                     
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         dynamicStagesResults['setup_generation_passed'] = rc_testing.generateSetups()
-                        script {
-                            rc_testing.respawnActors()
-                            rc_testing.unlockRegressSetups()
+                        if (dynamicStagesResults['setup_generation_passed'])
+                            script {
+                                rc_testing.respawnActors()
+                                rc_testing.unlockRegressSetups()
+                            }
                         }
                     }
                     else {
