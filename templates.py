@@ -1,6 +1,8 @@
 from string import Template
 
 BASE_GROOVY_TEMPLATE = Template("""
+import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
+
 def getStages() {
     rc_testing = load("rollout_stage/jenkins/rc_testing.groovy")
 
