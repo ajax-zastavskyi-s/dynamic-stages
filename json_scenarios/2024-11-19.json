@@ -1,0 +1,22 @@
+{
+    "name": "Test 19/11",
+    "date": "2024-11-19",
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "a911-svc",
+                "serviceVersion": "1.2",
+                "isKuber": false
+            }
+        },
+        {
+            "name": "runTests",
+            "parameters": {
+                "marks": [
+                    "journal"
+                ]
+            }
+        }
+    ]
+}
