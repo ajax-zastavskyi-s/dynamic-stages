@@ -11,6 +11,10 @@ jobs:
   generate-groovy-file:
     runs-on: ubuntu-latest
 
+    concurrency:
+      group: "groovy_generation_on_push"
+      cancel-in-progress: false
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -53,7 +57,6 @@ jobs:
           echo "No changes to commit."
         else
           git commit -m "${{ github.event.head_commit.message }}"
-          git pull --rebase
           git push origin HEAD:main
         fi
       env:
