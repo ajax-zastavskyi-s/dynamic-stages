@@ -1,39 +1,40 @@
 {
-    "name": "Test space-svc and external-device-svc, then test user-svc ",
+    "scenarioName": "Example scenario for today",
     "date": "2024-11-18",
     "stages": [
         {
-            "name": "deploy_service",
+            "name": "deployService",
             "parameters": {
-                "service_name": "space-svc",
-                "service_version": "123.RELEASE"
+                "serviceName": "user-svc",
+                "serviceVersion": "123.RELEASE"
             }
         },
         {
-            "name": "deploy_service",
+            "name": "deployService",
             "parameters": {
-                "service_name": "external-device-svc",
-                "service_version": "124.RELEASE"
+                "serviceName": "space-svc",
+                "serviceVersion": "124.RELEASE"
             }
         },
         {
-            "name": "run_tests",
-            "parameters": {
-                "marks": ["smart_home", "settings_and_statuses"]
-            }
-        },
-        {
-            "name": "deploy_service",
-            "parameters": {
-                "service_name": "user-svc",
-                "service_version": "125.RELEASE"
-            }
-        },
-        {
-            "name": "run_tests",
+            "name": "runTests",
             "parameters": {
                 "marks": []
             }
+        },
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "external-device-svc",
+                "serviceVersion": "125.RELEASE"
+            }
+        },
+        {
+            "name": "runTests",
+            "parameters": {
+                "marks": ["smart_home"]
+            }
         }
+
     ]
 }
