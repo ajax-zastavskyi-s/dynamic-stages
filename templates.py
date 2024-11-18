@@ -56,11 +56,9 @@ RUN_BDD_TESTS_TEMPLATE = Template("""
                     
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         dynamicStagesResults['setup_generation_passed'] = rc_testing.generateSetups()
-                        if (dynamicStagesResults['setup_generation_passed'])
-                            script {
+                        if (dynamicStagesResults['setup_generation_passed']) {
                                 rc_testing.respawnActors()
                                 rc_testing.unlockRegressSetups()
-                            }
                         }
                     }
                     else {
