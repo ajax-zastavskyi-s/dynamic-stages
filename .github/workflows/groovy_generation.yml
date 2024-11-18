@@ -44,6 +44,7 @@ jobs:
         for file in $ALL_CHANGED_FILES; do
           if [[ "$file" =~ json_scenarios/.*\.json && -f "$file" ]]; then
             python generate_scenario.py --json_scenario_path="$file" 
+            sleep 60
           fi
         done
 
