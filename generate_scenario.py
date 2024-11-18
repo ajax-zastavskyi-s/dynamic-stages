@@ -13,27 +13,27 @@ class RCGroovyScenarioBuilder:
 
     def get_builder_method(self, stage_name):
         return {
-            "deploy_service": self.build_deploy_service_stage,
-            "run_tests": self.build_run_bdd_tests_stage,
+            "deployService": self.build_deploy_service_stage,
+            "runTests": self.build_run_bdd_tests_stage,
         }.get(stage_name)
 
-    def build_deploy_service_stage(self, service_name, service_version):
+    def build_deploy_service_stage(self, serviceName, serviceVersion):
         """
             Deploy service with specified name and version
             a911-svc {version": "1.111.0-7151.MASTER-SNAPSHOT"}
         """
-        stage_passed_variable = f"deploy_{service_name.lower().replace('-', '_')}_passed"
+        stage_passed_variable = f"deploy_{serviceName.lower().replace('-', '_')}_passed"
 
         stage = render_template(
             template=DEPLOY_SVC_TEMPLATE,
-            stage_name=f"Deploy {service_name} {service_version}",
-            service_name=service_name,
-            service_version=service_version,
+            stage_name=f"Deploy {serviceName} {serviceVersion}",
+            service_name=serviceName,
+            service_version=serviceVersion,
             stage_passed_variable=stage_passed_variable,
         )
 
         self.stages.append(stage)
-        self.logger.info(f"Deploy {service_name} {service_version}")
+        self.logger.info(f"Deploy {serviceName} {serviceVersion}")
 
     def build_run_bdd_tests_stage(self, marks):
         """
@@ -67,7 +67,7 @@ class RCGroovyScenarioBuilder:
 
 def generate_groovy_file(json_scenario: dict):
     builder = RCGroovyScenarioBuilder(
-        scenario_name=json_scenario["name"],
+        scenario_name=json_scenario["scenarioName"],
         scenario_date=json_scenario["date"],
     )
 
