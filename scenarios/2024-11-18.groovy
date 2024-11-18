@@ -69,7 +69,6 @@ def getStages() {
                     else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
                         echo "Skip setup generation due to failure: ${failedStage} == false"
-                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
                     }
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
@@ -80,7 +79,9 @@ def getStages() {
                     else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key 
                         echo "Skip running BDD tests due to failure: ${failedStage} == false"
-                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
+                        if (failedStage != "setup_generation_passed") {
+                            Utils.markStageSkippedForConditional(env.STAGE_NAME)
+                        }
                     }
 
                     env.dynamicStagesResults = ""
@@ -124,7 +125,6 @@ def getStages() {
                     else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
                         echo "Skip setup generation due to failure: ${failedStage} == false"
-                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
                     }
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
@@ -135,7 +135,9 @@ def getStages() {
                     else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key 
                         echo "Skip running BDD tests due to failure: ${failedStage} == false"
-                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
+                        if (failedStage != "setup_generation_passed") {
+                            Utils.markStageSkippedForConditional(env.STAGE_NAME)
+                        }
                     }
 
                     env.dynamicStagesResults = ""
