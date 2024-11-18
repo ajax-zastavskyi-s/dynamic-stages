@@ -1,0 +1,20 @@
+{
+    "scenarioName": "123",
+    "date": "2011-11-11",
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "11",
+                "serviceVersion": "11",
+                "isKuber": false
+            }
+        },
+        {
+            "name": "runTests",
+            "parameters": {
+                "marks": []
+            }
+        }
+    ]
+}
