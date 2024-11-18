@@ -1,4 +1,4 @@
-name: Generate groovy files based on BDD scenarios
+name: Generate groovy files based on JSON representation of RC scenarios
 
 on:
   push:
