@@ -1,38 +1,38 @@
 {
-    "scenarioName": "Example scenario for today",
+    "scenarioName": "Example scenario for today's day",
     "date": "2024-11-18",
     "stages": [
         {
             "name": "deployService",
             "parameters": {
-                "serviceName": "user-svc",
+                "serviceName": "space-svc",
                 "serviceVersion": "123.RELEASE"
             }
         },
         {
             "name": "deployService",
             "parameters": {
-                "serviceName": "space-svc",
+                "serviceName": "external-device-svc",
                 "serviceVersion": "124.RELEASE"
             }
         },
         {
             "name": "runTests",
             "parameters": {
-                "marks": []
+                "marks": ["smart_home", "settings_and_statuses"]
             }
         },
         {
             "name": "deployService",
             "parameters": {
-                "serviceName": "external-device-svc",
+                "serviceName": "user-svc",
                 "serviceVersion": "125.RELEASE"
             }
         },
         {
             "name": "runTests",
             "parameters": {
-                "marks": ["smart_home"]
+                "marks": []
             }
         }
 
