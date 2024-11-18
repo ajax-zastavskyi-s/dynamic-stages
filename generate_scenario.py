@@ -42,7 +42,7 @@ class RCGroovyScenarioBuilder:
         stage_name = "Run BDD tests"
         if marks:
             marks = ", ".join(marks)
-            stage_name = f"{stage_name} {marks}"
+            stage_name = f"{stage_name} with marks: {marks}"
         else:
             marks = "Empty"
 

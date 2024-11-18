@@ -1,0 +1,39 @@
+{
+    "name": "Test space-svc and external-device-svc, then test user-svc",
+    "date": "2024-11-18",
+    "stages": [
+        {
+            "name": "deploy_service",
+            "parameters": {
+                "service_name": "space-svc",
+                "service_version": "123.RELEASE"
+            }
+        },
+        {
+            "name": "deploy_service",
+            "parameters": {
+                "service_name": "external-device-svc",
+                "service_version": "124.RELEASE"
+            }
+        },
+        {
+            "name": "run_tests",
+            "parameters": {
+                "marks": ["smart_home", "settings_and_statuses"]
+            }
+        },
+        {
+            "name": "deploy_service",
+            "parameters": {
+                "service_name": "user-svc",
+                "service_version": "125.RELEASE"
+            }
+        },
+        {
+            "name": "run_tests",
+            "parameters": {
+                "marks": []
+            }
+        }
+    ]
+}
