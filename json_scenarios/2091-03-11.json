@@ -1,12 +1,12 @@
 {
-    "scenarioName": "test new name and added test run",
+    "scenarioName": "test new delpoy",
     "date": "2091-03-11",
     "stages": [
         {
             "name": "deployService",
             "parameters": {
-                "serviceName": "123",
-                "serviceVersion": "123"
+                "serviceName": "4321",
+                "serviceVersion": "4321"
             }
         },
         {
