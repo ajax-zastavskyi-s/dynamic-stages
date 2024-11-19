@@ -1,6 +1,6 @@
 {
     "scenarioName": "New scenario, test - symbols . is ok",
-    "date": "1111-11-11",
+    "date": "1111-11-12",
     "stages": [
         {
             "name": "deployService",
