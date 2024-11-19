@@ -1,5 +1,5 @@
 {
-    "scenarioName": "test new name 3",
+    "scenarioName": "test new name and added test run",
     "date": "2091-03-11",
     "stages": [
         {
@@ -7,6 +7,12 @@
             "parameters": {
                 "serviceName": "123",
                 "serviceVersion": "123"
+            }
+        },
+        {
+            "name": "runTests",
+            "parameters": {
+                "marks": []
             }
         }
     ]
