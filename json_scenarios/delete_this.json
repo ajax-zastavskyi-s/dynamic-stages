@@ -1,0 +1,13 @@
+{
+    "scenarioName": "Delete this",
+    "date": "1217-12-12",
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "1",
+                "serviceVersion": "2"
+            }
+        }
+    ]
+}
