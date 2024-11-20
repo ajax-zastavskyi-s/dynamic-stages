@@ -1,0 +1,13 @@
+{
+    "scenarioName": "QEW",
+    "date": "3131-11-11",
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "1",
+                "serviceVersion": "1"
+            }
+        }
+    ]
+}
