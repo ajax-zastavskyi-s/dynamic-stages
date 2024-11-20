@@ -1,0 +1,13 @@
+{
+    "scenarioName": "[21_11_2024] Test new file name",
+    "date": "2024-11-20",
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "123",
+                "serviceVersion": "321"
+            }
+        }
+    ]
+}
