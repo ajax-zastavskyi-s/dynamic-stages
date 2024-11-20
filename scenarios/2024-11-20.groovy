@@ -54,7 +54,7 @@ def getStages() {
             }
         ],
         [
-            name: "Run BDD tests with marks: smart_lock",
+            name: "Run BDD tests",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
@@ -73,7 +73,7 @@ def getStages() {
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
-                            marks='smart_lock'
+                            marks='Empty'
                         )
                     }
                     else {
