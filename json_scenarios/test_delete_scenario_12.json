@@ -1,0 +1,13 @@
+{
+    "scenarioName": "Test delete scenario 12",
+    "date": "1121-12-12",
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "12671621",
+                "serviceVersion": "2121"
+            }
+        }
+    ]
+}
