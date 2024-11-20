@@ -1,0 +1,13 @@
+{
+    "scenarioName": "TEST NEW SCENARIO",
+    "date": "0232-02-22",
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "2344",
+                "serviceVersion": "121"
+            }
+        }
+    ]
+}
