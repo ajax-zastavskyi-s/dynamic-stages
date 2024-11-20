@@ -19,9 +19,7 @@
         {
             "name": "runTests",
             "parameters": {
-                "marks": [
-                    "smart_lock"
-                ]
+                "marks": []
             }
         }
     ]
