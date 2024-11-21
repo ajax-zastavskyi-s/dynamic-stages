@@ -1,5 +1,13 @@
 {
     "scenarioName": "crud",
     "date": "2024-12-05",
-    "stages": []
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "112",
+                "serviceVersion": "31"
+            }
+        }
+    ]
 }
