@@ -1,6 +1,6 @@
 {
-    "scenarioName": "20_11_24 Test deploy",
-    "date": "2024-11-20",
+    "scenarioName": "21_11_24 Test deploy",
+    "date": "2024-11-21",
     "stages": [
         {
             "name": "deployService",
