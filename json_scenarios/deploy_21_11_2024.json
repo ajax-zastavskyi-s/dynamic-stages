@@ -15,12 +15,6 @@
                 "serviceName": "org-api-svc",
                 "serviceVersion": "1.12.0-214.RELEASE"
             }
-        },
-        {
-            "name": "runTests",
-            "parameters": {
-                "marks": []
-            }
         }
     ]
 }
