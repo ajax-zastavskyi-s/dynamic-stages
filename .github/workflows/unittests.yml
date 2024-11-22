@@ -17,7 +17,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install Dependencies
-        run: pip install pytest pytest-mock pytest-cov
+        run: pip install -r requirements.txt
 
       - name: Run Unit Tests with Coverage Report
         run: pytest --cov=./ --cov-report=term --cov-config=tests/.coveragerc tests/
