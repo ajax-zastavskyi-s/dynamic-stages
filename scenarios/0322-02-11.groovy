@@ -11,7 +11,27 @@ def getStages() {
     }
 
     return [
+        [
+            name: "Deploy 123 21",
+            steps: {
+                script {
+                    dynamicStagesResults = getDynamicStagesResults()
+                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
+                        dynamicStagesResults['deploy_123_passed'] = rc_testing.deployService(
+                            serviceName="123",
+                            serviceVersion="21"
+                        )
+                    }
+                    else {
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
+                        echo "Skip deploy due to failure: ${failedStage} == false"
+                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
+                    }
 
+                    env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
+                }
+            }
+        ],
     ]
 }
 
