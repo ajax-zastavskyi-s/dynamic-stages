@@ -9,7 +9,7 @@ on:
 
 jobs:
   generate-groovy-file:
-    runs-on: ubuntu-latest
+    runs-on: "cloud-aqa-arm64-small"
 
     concurrency:
       group: "groovy_generation_on_push"
