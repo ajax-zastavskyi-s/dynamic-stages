@@ -1,0 +1,19 @@
+{
+    "scenarioName": "Deplou and run",
+    "date": "0054-04-13",
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "121",
+                "serviceVersion": "121"
+            }
+        },
+        {
+            "name": "runTests",
+            "parameters": {
+                "marks": []
+            }
+        }
+    ]
+}
