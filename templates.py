@@ -46,20 +46,17 @@ DEPLOY_SVC_TEMPLATE = Template("""
         ],
 """)
 
-
 RUN_BDD_TESTS_TEMPLATE = Template("""
         [
             name: "$stage_name",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
-                    
+
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
+                        rc_testing.clearDatabases()
+                        rc_testing.respawnActors()
                         dynamicStagesResults['setup_generation_passed'] = rc_testing.generateSetups()
-                        if (dynamicStagesResults['setup_generation_passed']) {
-                                rc_testing.respawnActors()
-                                rc_testing.unlockRegressSetups()
-                        }
                     }
                     else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
