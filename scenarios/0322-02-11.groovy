@@ -12,14 +12,14 @@ def getStages() {
 
     return [
         [
-            name: "Deploy 123 21",
+            name: "Deploy 123 211",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         dynamicStagesResults['deploy_123_passed'] = rc_testing.deployService(
                             serviceName="123",
-                            serviceVersion="21"
+                            serviceVersion="211"
                         )
                     }
                     else {
