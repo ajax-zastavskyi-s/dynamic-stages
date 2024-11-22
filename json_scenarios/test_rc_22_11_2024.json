@@ -1,0 +1,21 @@
+{
+    "scenarioName": "Test_RC_22.11.2024",
+    "date": "2024-11-22",
+    "stages": [
+        {
+            "name": "deployService",
+            "parameters": {
+                "serviceName": "external-device-svc",
+                "serviceVersion": "1.36.0-303.MASTER-SNAPSHOT"
+            }
+        },
+        {
+            "name": "runTests",
+            "parameters": {
+                "marks": [
+                    "smart_home"
+                ]
+            }
+        }
+    ]
+}
