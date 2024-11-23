@@ -16,28 +16,12 @@ env:
   SCENARIO_DATA: '${{ github.event.inputs.scenario_data }}'
 
 jobs:
-  check-pending-workflows:
-    runs-on: ubuntu-latest
-    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v4
-
-      - name: Check for pending or queued workflows
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          API_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs"
-          RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
-          PENDING_WORKFLOWS=$(echo "$RESPONSE" | jq '.workflow_runs | map(select(.status == "queued" or .status == "pending"))')
-
-          while [ "$(echo "$PENDING_WORKFLOWS" | jq 'length')" -gt 1 ]; do
-            echo "$PENDING_WORKFLOWS" | jq -r '.[] | "- \(.name) (ID: \(.id), Status: \(.status))"'
-            sleep 5
-          done
-
   update-scenario:
     runs-on: ubuntu-latest
-    needs: check-pending-workflows
+
+    concurrency:
+      group: "crud_rc_scenarios"
+      cancel-in-progress: false
 
     steps:
     - name: Checkout code

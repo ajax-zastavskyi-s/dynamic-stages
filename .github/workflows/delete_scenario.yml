@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     concurrency:
-      group: "rc-delete"
+      group: "crud_rc_scenarios"
       cancel-in-progress: false
 
     steps:
