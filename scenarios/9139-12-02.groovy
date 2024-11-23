@@ -12,13 +12,13 @@ def getStages() {
 
     return [
         [
-            name: "Deploy clodsfdsfsdfssffsdfssdfi-svc 0.43.0-2034.RELEASE",
+            name: "Deploy clodsfdsfsdfssffsdfssdfsdfdfi-svc 0.43.0-2034.RELEASE",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
-                        dynamicStagesResults['deploy_clodsfdsfsdfssffsdfssdfi_svc_passed'] = rc_testing.deployService(
-                            serviceName="clodsfdsfsdfssffsdfssdfi-svc",
+                        dynamicStagesResults['deploy_clodsfdsfsdfssffsdfssdfsdfdfi_svc_passed'] = rc_testing.deployService(
+                            serviceName="clodsfdsfsdfssffsdfssdfsdfdfi-svc",
                             serviceVersion="0.43.0-2034.RELEASE"
                         )
                     }
