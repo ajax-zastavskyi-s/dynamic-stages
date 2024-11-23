@@ -8,45 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.x'
-
-      - name: Install requests library
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
-
-      - name: Check for pending or queued workflows
+      - name: Check for pending or queued workflows using curl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python - <<EOF
-          import requests
-          import os
+          API_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs"
+          RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
+          PENDING_WORKFLOWS=$(echo "$RESPONSE" | jq '.workflow_runs | map(select(.status == "queued" or .status == "pending"))')
 
-          # GitHub API endpoint to check the workflow runs
-          repo_owner = os.getenv('GITHUB_REPOSITORY').split('/')[0]
-          repo_name = os.getenv('GITHUB_REPOSITORY').split('/')[1]
-          api_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/actions/runs"
-
-          headers = {
-              'Authorization': f'token {os.getenv("GITHUB_TOKEN")}'
-          }
-
-          response = requests.get(api_url, headers=headers)
-          if response.status_code == 200:
-              workflows = response.json()['workflow_runs']
-              pending_or_queued = [run for run in workflows if run['status'] in ['queued', 'in_progress']]
-              if pending_or_queued:
-                  print(f"Found {len(pending_or_queued)} pending/queued workflows:")
-                  for run in pending_or_queued:
-                      print(f"- {run['name']} (ID: {run['id']}, Status: {run['status']})")
-              else:
-                  print("No pending or queued workflows.")
-          else:
-              print(f"Failed to fetch workflow runs: {response.status_code}, {response.text}")
-          EOF
+          if [ "$(echo "$PENDING_WORKFLOWS" | jq 'length')" -gt 1 ]; then
+            echo "Found pending or queued workflows:"
+            echo "$PENDING_WORKFLOWS" | jq -r '.[] | "- \(.name) (ID: \(.id), Status: \(.status))"'
+          sleep 5
+          else
+            echo "No pending or queued workflows."
+          fi
