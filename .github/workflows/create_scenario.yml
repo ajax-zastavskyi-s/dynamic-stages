@@ -53,5 +53,7 @@ jobs:
           git commit -m "Create scenario for $SCENARIO_DATE"
           git push origin HEAD:main
         fi
+        
+        sleep 3
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
