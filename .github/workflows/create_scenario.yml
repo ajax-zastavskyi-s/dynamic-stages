@@ -55,5 +55,6 @@ jobs:
         fi
         
         sleep 3
+        echo "::set-output name=my_output::This is result of action!"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
