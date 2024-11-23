@@ -12,13 +12,13 @@ def getStages() {
 
     return [
         [
-            name: "Deploy cloud-api-svc 0.43.0-2034.RELEASE",
+            name: "Deploy clodsfdsfsfsdfssdfi-svc 0.43.0-2034.RELEASE",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
-                        dynamicStagesResults['deploy_cloud_api_svc_passed'] = rc_testing.deployService(
-                            serviceName="cloud-api-svc",
+                        dynamicStagesResults['deploy_clodsfdsfsfsdfssdfi_svc_passed'] = rc_testing.deployService(
+                            serviceName="clodsfdsfsfsdfssdfi-svc",
                             serviceVersion="0.43.0-2034.RELEASE"
                         )
                     }
