@@ -1,6 +1,6 @@
 from unittest.mock import mock_open, patch, MagicMock
 import json
-from generate_scenario import main, generate_groovy_file
+from generate_groovy_scenario import main, generate_groovy_file
 
 
 def test_main_valid_json(mocker, json_scenario):

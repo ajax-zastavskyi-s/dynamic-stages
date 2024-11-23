@@ -1,0 +1,65 @@
+name: 🔄 Update JSON and groovy scenarios for RC testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario_date:
+        description: 'Date for scenario to be updated. Unique identifier of scenario'
+        required: true
+      scenario_data:
+        description: 'JSON representation of RC testing scenario'
+        required: true
+
+env:
+  SCENARIO_ID: ${{ github.event.inputs.scenario_date }}
+  SCENARIO_DATE: ${{ fromJson(github.event.inputs.scenario_data).date}}
+  SCENARIO_DATA: '${{ github.event.inputs.scenario_data }}'
+
+jobs:
+  update-scenario:
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: "crud_rc_scenarios"
+      cancel-in-progress: false
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements_prod.txt
+
+    - name: Delete old JSON and groovy scenarios for $SCENARIO_ID"
+      run: |
+        rm json_scenarios/$SCENARIO_ID.json scenarios/$SCENARIO_ID.groovy
+
+    - name: Save JSON scenario for $SCENARIO_DATE
+      run: |
+        echo '${{ github.event.inputs.scenario_data }}' > json_scenarios/$SCENARIO_DATE.json
+
+    - name: Generate groovy file from scenario representation in JSON format
+      run: |
+        python generate_groovy_scenario.py --json_scenario_path=json_scenarios/$SCENARIO_DATE.json
+
+    - name: Push changes to repository
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+
+        git add json_scenarios scenarios
+        if git diff --cached --quiet; then
+          echo "No changes to commit."
+        else
+          git commit -m "Update scenario for $SCENARIO_ID"
+          git push origin HEAD:main
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

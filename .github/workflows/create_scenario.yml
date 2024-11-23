@@ -1,4 +1,4 @@
-name: Groovy file generation based on JSON representation of RC scenario
+name: 🆕 Create JSON and groovy scenarios for RC testing
 
 on:
   workflow_dispatch:
@@ -7,12 +7,16 @@ on:
         description: 'JSON representation of RC testing scenario'
         required: true
 
+env:
+  SCENARIO_DATE: ${{ fromJson(github.event.inputs.scenario_data).date}}
+  SCENARIO_DATA: '${{ github.event.inputs.scenario_data }}'
+
 jobs:
-  generate-groovy-file:
+  create-scenario:
     runs-on: ubuntu-latest
 
     concurrency:
-      group: "groovy_generation_on_push"
+      group: "crud_rc_scenarios"
       cancel-in-progress: false
 
     steps:
@@ -29,20 +33,24 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -r requirements_prod.txt
 
+    - name: Save JSON scenario
+      run: |
+        echo $SCENARIO_DATA > json_scenarios/$SCENARIO_DATE.json
+
     - name: Generate groovy file from scenario representation in JSON format
       run: |
-        python generate_scenario.py --json_scenario="${{ github.event.inputs.scenario_data }}"
+        python generate_groovy_scenario.py --json_scenario_path=json_scenarios/$SCENARIO_DATE.json
 
-    - name: Push generated groovy scenarios to repository
+    - name: Push changes to repository
       run: |
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
 
-        git add scenarios
+        git add json_scenarios scenarios
         if git diff --cached --quiet; then
           echo "No changes to commit."
         else
-          git commit -m "Generate groovy file for ${{ fromJson(github.event.inputs.scenario_data).date"
+          git commit -m "Create scenario for $SCENARIO_DATE"
           git push origin HEAD:main
         fi
       env:
