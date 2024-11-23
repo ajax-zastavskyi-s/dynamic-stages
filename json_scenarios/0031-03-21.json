@@ -1,1 +1,1 @@
-{"scenarioName": "new", "date": "0031-03-21", "stages": []}
+{"scenarioName": "new", "date": "0031-03-21", "stages": [{"name": "deployService", "parameters": {"serviceName": "121", "serviceVersion": "21"}}], "old_date": "0031-03-21"}
