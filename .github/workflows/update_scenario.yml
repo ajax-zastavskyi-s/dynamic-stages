@@ -19,10 +19,10 @@ jobs:
   check-pending-workflows:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
 
-      - name: Check for pending or queued workflows using curl
+      - name: Check for pending or queued workflows
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -30,21 +30,14 @@ jobs:
           RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL")
           PENDING_WORKFLOWS=$(echo "$RESPONSE" | jq '.workflow_runs | map(select(.status == "queued" or .status == "pending"))')
 
-          if [ "$(echo "$PENDING_WORKFLOWS" | jq 'length')" -gt 1 ]; then
-            echo "Found pending or queued workflows:"
+          while [ "$(echo "$PENDING_WORKFLOWS" | jq 'length')" -gt 1 ]; do
             echo "$PENDING_WORKFLOWS" | jq -r '.[] | "- \(.name) (ID: \(.id), Status: \(.status))"'
-          sleep 5
-          else
-            echo "No pending or queued workflows."
-          fi
+            sleep 5
+          done
 
   update-scenario:
     runs-on: ubuntu-latest
     needs: check-pending-workflows
-
-#    concurrency:
-#      group: "rc_scenarios"
-#      cancel-in-progress: false
 
     steps:
     - name: Checkout code
