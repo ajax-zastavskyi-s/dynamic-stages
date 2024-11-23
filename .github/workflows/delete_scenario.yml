@@ -11,7 +11,7 @@ env:
   SCENARIO_ID: ${{ github.event.inputs.scenario_date }}
 
 jobs:
-  update-scenario:
+  delete-scenario:
     runs-on: ubuntu-latest
 
     concurrency:
@@ -20,7 +20,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v2
