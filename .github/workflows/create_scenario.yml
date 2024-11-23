@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     concurrency:
-      group: "crud_rc_scenarios"
+      group: "rc-create"
       cancel-in-progress: false
 
     steps:
@@ -55,6 +55,5 @@ jobs:
         fi
         
         sleep 3
-        echo "::set-output name=my_output::This is result of action!"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

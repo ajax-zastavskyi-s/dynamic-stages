@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     concurrency:
-      group: "crud_rc_scenarios"
+      group: "rc-update"
       cancel-in-progress: false
 
     steps:
