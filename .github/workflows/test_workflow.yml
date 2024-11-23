@@ -1,0 +1,19 @@
+name: test_dispatch_workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run the workflow on'
+        required: true
+        default: 'main'
+
+jobs:
+  run-on-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Print branch name
+        run: echo "This workflow was triggered on branch ${{ github.event.inputs.branch }}"
