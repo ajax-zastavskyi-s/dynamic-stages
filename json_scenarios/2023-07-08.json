@@ -1,1 +1,1 @@
-{"scenarioName":"Test Scenario","date":"2023-07-08","stages":[{"name":"deployService","parameters":{"serviceName":"org-api-svc","serviceVersion":"1.14.0-253.MASTER-SNAPSHOT"}},{"name":"runTests","parameters":{"marks":[]}}]}
+{"scenarioName":"hello im updated","date":"2023-07-08","stages":[]}
