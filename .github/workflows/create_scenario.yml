@@ -1,4 +1,4 @@
-name: 🆕 Create JSON and groovy scenarios for RC testing ${{ fromJson(github.event.inputs.scenario_data).date}}
+name: 🆕 Create JSON and groovy scenarios for RC testing
 
 on:
   workflow_dispatch:
