@@ -1,0 +1,1 @@
+{"scenarioName":"Test Scenario","date":"9139-12-03","stages":[{"name":"deployService","parameters":{"serviceName":"cloud-api-svc","serviceVersion":"0.43.0-2034.RELEASE"}},{"name":"deployService","parameters":{"serviceName":"org-api-svc","serviceVersion":"1.12.0-214.RELEASE"}},{"name":"runTests","parameters":{"marks":[]}}]}
