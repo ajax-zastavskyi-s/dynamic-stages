@@ -23,6 +23,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Setup Github Action user
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -42,18 +47,14 @@ jobs:
         python generate_groovy_scenario.py --json_scenario_path=json_scenarios/$SCENARIO_DATE.json
 
     - name: Push changes to repository
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-
         git add json_scenarios scenarios
+
         if git diff --cached --quiet; then
           echo "No changes to commit."
         else
           git commit -m "Create scenario for $SCENARIO_DATE"
           git push origin HEAD:main
         fi
-        
-        sleep 3
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
