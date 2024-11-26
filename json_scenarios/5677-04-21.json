@@ -1,0 +1,1 @@
+{"scenarioName": "Test scenario", "date": "5677-04-21", "stages": [{"name": "deployService", "parameters": {"serviceName": "123", "serviceVersion": "321"}}, {"name": "runTests", "parameters": {"marks": []}}]}
