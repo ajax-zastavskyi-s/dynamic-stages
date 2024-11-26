@@ -56,5 +56,5 @@ jobs:
           echo "No changes to commit."
         else
           git commit -m "Create scenario for $SCENARIO_DATE"
-          git push origin HEAD:main
+          git push origin HEAD:master
         fi
