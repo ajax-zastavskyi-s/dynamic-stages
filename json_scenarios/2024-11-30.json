@@ -1,1 +1,0 @@
-{"scenarioName": "sdgkl", "date": "2024-11-30", "stages": [{"name": "deployService", "parameters": {"serviceName": "faasfaes", "serviceVersion": "afeafaf"}}, {"name": "runTests", "parameters": {"marks": ["fafefaf", "faeaf"]}}]}
