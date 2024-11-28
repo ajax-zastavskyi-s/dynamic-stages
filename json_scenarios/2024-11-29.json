@@ -1,0 +1,1 @@
+{"scenarioName": "Verify a911-svc", "date": "2024-11-29", "stages": [{"name": "deployService", "parameters": {"serviceName": "a911-svc", "serviceVersion": "1.118.0-7447.RELEASE"}}, {"name": "runTests", "parameters": {"marks": []}}]}
