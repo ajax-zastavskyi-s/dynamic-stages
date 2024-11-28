@@ -1,1 +1,0 @@
-{"scenarioName": "Test Scenario", "date": "2024-11-25", "stages": [{"name": "deployService", "parameters": {"serviceName": "org-api-svc", "serviceVersion": "1.14.0-253.MASTER-SNAPSHOT"}}, {"name": "runTests", "parameters": {"marks": ["regress"]}}]}
