@@ -21,10 +21,11 @@ def getStages() {
                             serviceName="a911-svc",
                             serviceVersionPattern="1.118.0-7447.RELEASE"
                         )
+                        echo "Resolved: ${serviceVersionFromPattern}"
 
                         dynamicStagesResults['deploy_a911_svc_passed'] = rc_testing.deployService(
                             serviceName="a911-svc",
-                            serviceVersion="${serviceVersionFromPattern}"
+                            serviceVersion=serviceVersionFromPattern
                         )
                     }
                     else {
