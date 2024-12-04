@@ -12,18 +12,18 @@ def getStages() {
 
     return [
         [
-            name: "Deploy external-device-svc wrong version pattern",
+            name: "Deploy a911-svc 1.118.0-7447.RELEASE",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                            serviceName="external-device-svc",
-                            serviceVersionPattern="wrong version pattern"
+                            serviceName="a911-svc",
+                            serviceVersionPattern="1.118.0-7447.RELEASE"
                         )
 
-                        dynamicStagesResults['deploy_external_device_svc_passed'] = rc_testing.deployService(
-                            serviceName="external-device-svc",
+                        dynamicStagesResults['deploy_a911_svc_passed'] = rc_testing.deployService(
+                            serviceName="a911-svc",
                             serviceVersion="${serviceVersionFromPattern}"
                         )
                     }
@@ -59,7 +59,7 @@ def getStages() {
                         )
                     }
                     else {
-                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key 
                         echo "Skip running BDD tests due to failure: ${failedStage} == false"
                         if (failedStage != "setup_generation_passed") {
                             Utils.markStageSkippedForConditional(env.STAGE_NAME)
