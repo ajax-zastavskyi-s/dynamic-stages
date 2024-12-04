@@ -12,6 +12,32 @@ def getStages() {
 
     return [
         [
+            name: "Deploy a911-svc 1.118.*RELEASE",
+            steps: {
+                script {
+                    dynamicStagesResults = getDynamicStagesResults()
+                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
+                        def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
+                            serviceName="a911-svc",
+                            serviceVersionPattern="1.118.*RELEASE"
+                        )
+
+                        dynamicStagesResults['deploy_a911_svc_passed'] = rc_testing.deployService(
+                            serviceName="a911-svc",
+                            serviceVersion=serviceVersionFromPattern
+                        )
+                    }
+                    else {
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
+                        echo "Skip deploy due to failure: ${failedStage} == false"
+                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
+                    }
+
+                    env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
+                }
+            }
+        ],
+        [
             name: "Deploy a911-svc 1.118.0-7447.RELEASE",
             steps: {
                 script {
@@ -21,7 +47,32 @@ def getStages() {
                             serviceName="a911-svc",
                             serviceVersionPattern="1.118.0-7447.RELEASE"
                         )
-                        echo "Resolved: ${serviceVersionFromPattern}"
+
+                        dynamicStagesResults['deploy_a911_svc_passed'] = rc_testing.deployService(
+                            serviceName="a911-svc",
+                            serviceVersion=serviceVersionFromPattern
+                        )
+                    }
+                    else {
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
+                        echo "Skip deploy due to failure: ${failedStage} == false"
+                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
+                    }
+
+                    env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
+                }
+            }
+        ],
+        [
+            name: "Deploy a911-svc wrong version",
+            steps: {
+                script {
+                    dynamicStagesResults = getDynamicStagesResults()
+                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
+                        def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
+                            serviceName="a911-svc",
+                            serviceVersionPattern="wrong version"
+                        )
 
                         dynamicStagesResults['deploy_a911_svc_passed'] = rc_testing.deployService(
                             serviceName="a911-svc",
