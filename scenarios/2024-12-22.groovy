@@ -12,7 +12,7 @@ def getStages() {
 
     return [
         [
-            name: "Run BDD tests with marks: 1",
+            name: "Run BDD tests with marks: 2",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
@@ -29,7 +29,7 @@ def getStages() {
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
-                            marks='1'
+                            marks='2'
                         )
                     }
                     else {
