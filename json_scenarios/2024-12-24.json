@@ -1,1 +1,1 @@
-{"scenarioName": "new scneario", "date": "2024-12-24", "stages": []}
+{"scenarioName": "new scneario", "date": "2024-12-24", "stages": [{"name": "runTests", "parameters": {"marks": ["video"]}}]}
