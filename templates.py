@@ -29,9 +29,14 @@ DEPLOY_SVC_TEMPLATE = Template("""
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
+                        def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
+                            serviceName="$service_name",
+                            serviceVersionPattern="$service_version"
+                        )
+
                         dynamicStagesResults['$stage_passed_variable'] = rc_testing.deployService(
                             serviceName="$service_name",
-                            serviceVersion="$service_version"
+                            serviceVersion=serviceVersionFromPattern
                         )
                     }
                     else {
