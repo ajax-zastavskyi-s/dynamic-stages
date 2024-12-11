@@ -3,8 +3,6 @@ from string import Template
 BASE_GROOVY_TEMPLATE = Template("""
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
-def failedDeploys = []
-
 def getStages() {
     rc_testing = load("rollout_stage/jenkins/rc_testing.groovy")
 
@@ -42,7 +40,7 @@ DEPLOY_SVC_TEMPLATE = Template("""
                         )
 
                         if (dynamicStagesResults['$stage_passed_variable'] == false) {
-                            failedDeploys << "Deploy $service_name $service_version"
+                            failedRCDeploys << "Deploy $service_name $service_version"
                         }
                     }
                     else {
