@@ -38,10 +38,6 @@ DEPLOY_SVC_TEMPLATE = Template("""
                             serviceName="$service_name",
                             serviceVersion=serviceVersionFromPattern
                         )
-
-                        if (dynamicStagesResults['$stage_passed_variable'] == false) {
-                            failedRCDeploys << "Deploy $service_name $service_version"
-                        }
                     }
                     else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
@@ -74,7 +70,8 @@ RUN_BDD_TESTS_TEMPLATE = Template("""
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
-                            marks='$marks'
+                            marks='$marks',
+                            test_plan_name='$test_plan_name'
                         )
                     }
                     else {

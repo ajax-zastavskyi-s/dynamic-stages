@@ -26,10 +26,6 @@ def getStages() {
                             serviceName="external-device-svc",
                             serviceVersion=serviceVersionFromPattern
                         )
-                        echo "REPO REPO REPO ${dynamicStagesRepoName}"
-                        if (dynamicStagesResults['deploy_external_device_svc_passed'] == false) {
-                            failedRCDeploys << "Deploy external-device-svc wrong version"
-                        }
                     }
                     else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key

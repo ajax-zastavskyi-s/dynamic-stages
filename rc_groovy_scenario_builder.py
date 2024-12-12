@@ -9,6 +9,7 @@ class RCGroovyScenarioBuilder:
         self.scenario_date = scenario_date
         self.stages = []
         self.logger = logger
+        self.deployments = []
 
     def get_builder_method(self, stage_name):
         return {
@@ -28,6 +29,8 @@ class RCGroovyScenarioBuilder:
         )
 
         self.stages.append(stage)
+        self.deployments.append(f"{serviceName} {serviceVersion}")
+
         self.logger.info(f"Deploy {serviceName} {serviceVersion}")
 
     def build_run_bdd_tests_stage(self, marks):
@@ -39,10 +42,17 @@ class RCGroovyScenarioBuilder:
         else:
             marks = "Empty"
 
+        if self.deployments:
+            test_plan_name = " | ".join(self.deployments)
+            test_plan_name = f"RC [{test_plan_name}]"
+        else:
+            test_plan_name = "RC [Undefined]"
+
         run_tests_stage = render_template(
             template=RUN_BDD_TESTS_TEMPLATE,
             stage_name=stage_name,
-            marks=marks
+            marks=marks,
+            test_plan_name=test_plan_name
         )
 
         self.stages.append(run_tests_stage)
