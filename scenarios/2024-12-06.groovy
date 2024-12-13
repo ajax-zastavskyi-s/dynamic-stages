@@ -12,7 +12,7 @@ def getStages() {
 
     def getFailedDeploys = {
       if (env.failedRCDeploys) {
-        echo ${env.failedRCDeploys}
+        echo "${env.failedRCDeploys}"
         return env.failedRCDeploys.split(',').toList()
       }
       return []
