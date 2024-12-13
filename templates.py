@@ -12,6 +12,19 @@ def getStages() {
         }
         return [:]
     }
+def getFailedDeploys() {
+  if (env.failedRCDeploys) {
+    echo ${env.failedRCDeploys}
+    return env.failedRCDeploys.split(',').toList()
+  }
+  return []
+}
+
+def addFailedRCDeploy(service, version) {
+  def failedRCDeploys = getFailedDeploys()
+  failedDeploys.add("Deploy ${service} ${version}")
+  env.failedDeploys = failedDeploys.join(",")
+}
 
     return [
 $stages
@@ -38,6 +51,9 @@ DEPLOY_SVC_TEMPLATE = Template("""
                             serviceName="$service_name",
                             serviceVersion=serviceVersionFromPattern
                         )
+                        if (dynamicStagesResults['$stage_passed_variable'] == false) {
+                          addFailedRCDeploy($service_name, $service_version)
+                        }
                     }
                     else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
