@@ -40,7 +40,7 @@ def addFailedRCDeploy(service, version) {
                             serviceVersion=serviceVersionFromPattern
                         )
                         if (dynamicStagesResults['deploy_external_device_svc_passed'] == false) {
-                          addFailedRCDeploy(external-device-svc, wrong version 1)
+                          addFailedRCDeploy("external-device-svc", "wrong version 1")
                         }
                     }
                     else {
@@ -103,7 +103,7 @@ def addFailedRCDeploy(service, version) {
                             serviceVersion=serviceVersionFromPattern
                         )
                         if (dynamicStagesResults['deploy_external_device_svc_passed'] == false) {
-                          addFailedRCDeploy(external-device-svc, wrong version 2)
+                          addFailedRCDeploy("external-device-svc", "wrong version 2")
                         }
                     }
                     else {

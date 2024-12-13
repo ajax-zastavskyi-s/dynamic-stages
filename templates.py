@@ -52,7 +52,7 @@ DEPLOY_SVC_TEMPLATE = Template("""
                             serviceVersion=serviceVersionFromPattern
                         )
                         if (dynamicStagesResults['$stage_passed_variable'] == false) {
-                          addFailedRCDeploy($service_name, $service_version)
+                          addFailedRCDeploy("$service_name", "$service_version")
                         }
                     }
                     else {
