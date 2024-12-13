@@ -12,19 +12,20 @@ def getStages() {
         }
         return [:]
     }
-def getFailedDeploys() {
-  if (env.failedRCDeploys) {
-    echo ${env.failedRCDeploys}
-    return env.failedRCDeploys.split(',').toList()
-  }
-  return []
-}
 
-def addFailedRCDeploy(service, version) {
-  def failedRCDeploys = getFailedDeploys()
-  failedDeploys.add("Deploy ${service} ${version}")
-  env.failedDeploys = failedDeploys.join(",")
-}
+    def getFailedDeploys = {
+      if (env.failedRCDeploys) {
+        echo ${env.failedRCDeploys}
+        return env.failedRCDeploys.split(',').toList()
+      }
+      return []
+    }
+
+    def addFailedRCDeploy = {service, version ->
+      def failedRCDeploys = getFailedDeploys()
+      failedDeploys.add("Deploy ${service} ${version}")
+      env.failedDeploys = failedDeploys.join(",")
+    }
 
     return [
 $stages
