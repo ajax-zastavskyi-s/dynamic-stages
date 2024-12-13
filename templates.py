@@ -23,8 +23,8 @@ def getStages() {
 
     def addFailedRCDeploy = {service, version ->
       def failedRCDeploys = getFailedDeploys()
-      failedDeploys.add("Deploy ${service} ${version}")
-      env.failedDeploys = failedDeploys.join(",")
+      failedRCDeploys.add("Deploy ${service} ${version}")
+      env.failedRCDeploys = failedRCDeploys.join(",")
     }
 
     return [
