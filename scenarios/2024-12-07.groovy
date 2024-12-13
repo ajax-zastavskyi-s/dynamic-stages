@@ -10,18 +10,11 @@ def getStages() {
         return [:]
     }
 
-    def getFailedDeploys = {
-      if (env.failedRCDeploys) {
-        echo "${env.failedRCDeploys}"
-        return env.failedRCDeploys.split(',').toList()
-      }
-      return []
-    }
+    def saveFailedDeploy = {service, version ->
+        def failedRCDeploys = env.failedRCDeploys ? env.failedRCDeploys.split(',').toList() : []
 
-    def addFailedRCDeploy = {service, version ->
-      def failedRCDeploys = getFailedDeploys()
-      failedRCDeploys.add("Deploy ${service} ${version}")
-      env.failedRCDeploys = failedRCDeploys.join(",")
+        failedRCDeploys.add("Deploy ${service} ${version}")
+        env.failedRCDeploys = failedRCDeploys.join(",")
     }
 
     return [
@@ -41,7 +34,7 @@ def getStages() {
                             serviceVersion=serviceVersionFromPattern
                         )
                         if (dynamicStagesResults['deploy_external_device_svc_passed'] == false) {
-                          addFailedRCDeploy("external-device-svc", "1.36.1-306.RELEASE")
+                          saveFailedDeploy("external-device-svc", "1.36.1-306.RELEASE")
                         }
                     }
                     else {
@@ -104,7 +97,7 @@ def getStages() {
                             serviceVersion=serviceVersionFromPattern
                         )
                         if (dynamicStagesResults['deploy_external_device_svc_passed'] == false) {
-                          addFailedRCDeploy("external-device-svc", "1.36.1*.RELEASE")
+                          saveFailedDeploy("external-device-svc", "1.36.1*.RELEASE")
                         }
                     }
                     else {
