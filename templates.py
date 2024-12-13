@@ -14,7 +14,7 @@ def getStages() {
     }
 
     def saveFailedDeploy = {service, version ->
-        env.failedRCDeploys ? env.failedRCDeploys.split(',').toList() : []
+        def failedRCDeploys = env.failedRCDeploys ? env.failedRCDeploys.split(',').toList() : []
 
         failedRCDeploys.add("Deploy ${service} ${version}")
         env.failedRCDeploys = failedRCDeploys.join(",")
