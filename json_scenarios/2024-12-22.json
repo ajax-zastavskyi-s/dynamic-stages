@@ -1,1 +1,1 @@
-{"scenarioName": "Run tests ", "date": "2024-12-22", "stages": [{"name": "runTests", "parameters": {"marks": ["2"]}}]}
+{"scenarioName":"Test Scenario","date":"2024-12-22","stages":[{"name":"runTests","parameters":{"marks":[]}}, {"name":"runTests","parameters":{"marks":[]}}]}
