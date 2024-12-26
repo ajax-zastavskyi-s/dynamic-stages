@@ -1,0 +1,1 @@
+{"scenarioName": "asd", "date": "2025-01-03", "stages": [{"name": "deployService", "parameters": {"serviceName": "external-device-svc", "serviceVersion": "1.36.1-306.RELEASE"}}, {"name": "runTests", "parameters": {"marks": ["regress"]}}, {"name": "deployService", "parameters": {"serviceName": "a911-svc", "serviceVersion": "1.1.1*.RELEASE", "deploymentDestination": "k8"}}]}
