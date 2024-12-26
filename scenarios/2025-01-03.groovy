@@ -46,14 +46,14 @@ def getStages() {
             }
         ],
         [
-            name: "Deploy a911-svc 1.1.1*.RELEASE",
+            name: "Deploy a911-svc 1.122.0-7660.MASTER-SNAPSHOT",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
                             serviceName="a911-svc",
-                            serviceVersionPattern="1.1.1*.RELEASE"
+                            serviceVersionPattern="1.122.0-7660.MASTER-SNAPSHOT"
                         )
 
                         dynamicStagesResults['deploy_a911_svc_passed'] = rc_testing.deployService(
