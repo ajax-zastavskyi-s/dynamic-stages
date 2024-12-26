@@ -43,11 +43,9 @@ DEPLOY_SVC_TEMPLATE = Template("""
 
                         dynamicStagesResults['$stage_passed_variable'] = rc_testing.deployService(
                             serviceName="$service_name",
-                            serviceVersion=serviceVersionFromPattern
+                            serviceVersion=serviceVersionFromPattern,
+                            deploymentDestination="$deployment_destination",
                         )
-                        if (dynamicStagesResults['$stage_passed_variable'] == false) {
-                          saveFailedDeploy("$service_name", "$service_version")
-                        }
                     }
                     else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key

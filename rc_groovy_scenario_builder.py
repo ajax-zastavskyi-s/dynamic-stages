@@ -17,7 +17,7 @@ class RCGroovyScenarioBuilder:
             "runTests": self.build_run_bdd_tests_stage,
         }.get(stage_name)
 
-    def build_deploy_service_stage(self, serviceName, serviceVersion):
+    def build_deploy_service_stage(self, serviceName, serviceVersion, deploymentDestination=None):
         stage_passed_variable = f"deploy_{serviceName.lower().replace('-', '_')}_passed"
 
         stage = render_template(
@@ -25,6 +25,7 @@ class RCGroovyScenarioBuilder:
             stage_name=f"Deploy {serviceName} {serviceVersion}",
             service_name=serviceName,
             service_version=serviceVersion,
+            deployment_destination=deploymentDestination or "null",
             stage_passed_variable=stage_passed_variable,
         )
 
