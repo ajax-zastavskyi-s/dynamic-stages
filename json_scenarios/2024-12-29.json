@@ -1,0 +1,1 @@
+{"scenarioName": "asd", "date": "2024-12-29", "stages": [{"name": "deployService", "parameters": {"serviceName": "csa", "serviceVersion": "1.106.0.12840.RELEASE"}}]}
