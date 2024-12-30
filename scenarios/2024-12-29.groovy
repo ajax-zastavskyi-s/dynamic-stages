@@ -19,18 +19,18 @@ def getStages() {
 
     return [
         [
-            name: "Deploy csa 1.106.0.12840.RELEASE",
+            name: "Deploy communication-svc 1.64.1-2323.RELEASE",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                            serviceName="csa",
-                            serviceVersionPattern="1.106.0.12840.RELEASE"
+                            serviceName="communication-svc",
+                            serviceVersionPattern="1.64.1-2323.RELEASE"
                         )
 
-                        dynamicStagesResults['deploy_csa_passed'] = rc_testing.deployService(
-                            serviceName="csa",
+                        dynamicStagesResults['deploy_communication_svc_passed'] = rc_testing.deployService(
+                            serviceName="communication-svc",
                             serviceVersion=serviceVersionFromPattern,
                             deploymentDestination="null",
                         )
