@@ -14,6 +14,7 @@ def test_build_deploy_service_stage(mock_logger, mock_render_template):
         stage_name="Deploy a-svc 1.0",
         service_name="a-svc",
         service_version="1.0",
+        deployment_destination="null",
         stage_passed_variable="deploy_a_svc_passed"
     )
 
@@ -30,7 +31,8 @@ def test_build_run_bdd_tests_stage(mock_logger, mock_render_template):
     mock_render_template.assert_called_once_with(
         template=RUN_BDD_TESTS_TEMPLATE,
         stage_name="Run BDD tests with marks: smoke, regression",
-        marks="smoke, regression"
+        marks="smoke, regression",
+        test_plan_name="RC [Undefined]",
     )
     assert "Filled template to run tests" in builder.stages
     mock_logger.info.assert_called_with("Run BDD tests with marks: smoke, regression")
