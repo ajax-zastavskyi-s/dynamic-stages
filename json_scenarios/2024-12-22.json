@@ -1,1 +1,18 @@
-{"scenarioName":"Test Scenario","date":"2024-12-22","stages":[{"name":"runTests","parameters":{"marks":[]}}, {"name":"runTests","parameters":{"marks":[]}}]}
+{
+  "scenarioName": "Test Scenario",
+  "date": "2024-12-22",
+  "stages": [
+    {
+      "name": "runTests",
+      "parameters": {
+        "marks": []
+      }
+    },
+    {
+      "name": "runTests",
+      "parameters": {
+        "marks": []
+      }
+    }
+  ]
+}

@@ -18,7 +18,7 @@ def test_build_deploy_service_stage(mock_logger, mock_render_template):
         stage_passed_variable="deploy_a_svc_passed"
     )
 
-    assert "Filled template to deploy service" in builder.stages
+    assert "Filled template to deploy service" in builder.build_stages
     mock_logger.info.assert_called_with("Deploy a-svc 1.0")
 
 
@@ -34,13 +34,13 @@ def test_build_run_bdd_tests_stage(mock_logger, mock_render_template):
         marks="smoke, regression",
         test_plan_name="RC [Undefined]",
     )
-    assert "Filled template to run tests" in builder.stages
+    assert "Filled template to run tests" in builder.build_stages
     mock_logger.info.assert_called_with("Run BDD tests with marks: smoke, regression")
 
 
 def test_save_groovy_file(mock_logger, mock_render_template):
     builder = RCGroovyScenarioBuilder("TestScenario", "2024-11-19", mock_logger)
-    builder.stages = ["Deploy Stage", "Run Tests Stage"]
+    builder.build_stages = ["Deploy Stage", "Run Tests Stage"]
     mock_render_template.return_value = "groovy file content"
 
     with patch("rc_groovy_scenario_builder.open", mock_open()) as mock_file:

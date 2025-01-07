@@ -1,1 +1,28 @@
-{"scenarioName":"Test Scenario","date":"2024-12-08","stages":[{"name":"deployService","parameters":{"serviceName":"external-device-svc","serviceVersion":"wrong version"}}, {"name": "runTests", "parameters": {"marks": ["regress"]}}, {"name":"deployService","parameters":{"serviceName":"external-device-svc","serviceVersion":"1.36.1*.RELEASE"}}]}
+{
+  "scenarioName": "Test Scenario",
+  "date": "2024-12-08",
+  "stages": [
+    {
+      "name": "deployService",
+      "parameters": {
+        "serviceName": "external-device-svc",
+        "serviceVersion": "wrong version"
+      }
+    },
+    {
+      "name": "runTests",
+      "parameters": {
+        "marks": [
+          "regress"
+        ]
+      }
+    },
+    {
+      "name": "deployService",
+      "parameters": {
+        "serviceName": "external-device-svc",
+        "serviceVersion": "1.36.1*.RELEASE"
+      }
+    }
+  ]
+}

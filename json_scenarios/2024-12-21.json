@@ -1,1 +1,14 @@
-{"scenarioName": "first_scenario", "date": "2024-12-21", "stages": [{"name": "runTests", "parameters": {"marks": ["regress"]}}]}
+{
+  "scenarioName": "first_scenario",
+  "date": "2024-12-21",
+  "stages": [
+    {
+      "name": "runTests",
+      "parameters": {
+        "marks": [
+          "regress"
+        ]
+      }
+    }
+  ]
+}

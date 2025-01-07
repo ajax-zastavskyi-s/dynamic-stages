@@ -1,1 +1,21 @@
-{"scenarioName": "asd", "date": "2025-01-03", "stages": [{"name": "deployService", "parameters": {"serviceName": "external-device-svc", "serviceVersion": "1.36.1-306.RELEASE"}}, {"name": "deployService", "parameters": {"serviceName": "a911-svc", "serviceVersion": "1.122.0-7660.MASTER-SNAPSHOT", "deploymentDestination": "k8"}}]}
+{
+  "scenarioName": "asd",
+  "date": "2025-01-03",
+  "stages": [
+    {
+      "name": "deployService",
+      "parameters": {
+        "serviceName": "external-device-svc",
+        "serviceVersion": "1.36.1-306.RELEASE"
+      }
+    },
+    {
+      "name": "deployService",
+      "parameters": {
+        "serviceName": "a911-svc",
+        "serviceVersion": "1.122.0-7660.MASTER-SNAPSHOT",
+        "deploymentDestination": "k8"
+      }
+    }
+  ]
+}

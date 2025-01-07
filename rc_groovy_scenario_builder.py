@@ -4,12 +4,18 @@ from templates import DEPLOY_SVC_TEMPLATE, RUN_BDD_TESTS_TEMPLATE, BASE_GROOVY_T
 SCENARIOS_DIR = "scenarios"
 
 class RCGroovyScenarioBuilder:
-    def __init__(self, scenario_name, scenario_date, logger):
-        self.scenario_name = scenario_name
-        self.scenario_date = scenario_date
-        self.stages = []
+    def __init__(self,
+                 scenario,
+                 logger,
+                 parallel_deployment=False):
+        self.scenario_name = scenario["scenarioName"]
+        self.scenario_date = scenario["date"]
+        self.config_stages = scenario["stages"]
+        self.build_stages = []
         self.logger = logger
         self.deployments = []
+        self.parallel_deployment = parallel_deployment
+        self.current_parallel_stage = []
 
     def get_builder_method(self, stage_name):
         return {
@@ -17,7 +23,14 @@ class RCGroovyScenarioBuilder:
             "runTests": self.build_run_bdd_tests_stage,
         }.get(stage_name)
 
+    def build(self):
+        for stage in self.config_stages:
+            builder_method = self.get_builder_method(stage_name=stage["name"])
+            builder_method(**stage["parameters"])
+
+
     def build_deploy_service_stage(self, serviceName, serviceVersion, deploymentDestination="null"):
+
         stage_passed_variable = f"deploy_{serviceName.lower().replace('-', '_')}_passed"
 
         stage = render_template(
@@ -29,7 +42,7 @@ class RCGroovyScenarioBuilder:
             stage_passed_variable=stage_passed_variable,
         )
 
-        self.stages.append(stage)
+        self.build_stages.append(stage)
         self.deployments.append(f"{serviceName} {serviceVersion}")
 
         self.logger.info(f"Deploy {serviceName} {serviceVersion}")
@@ -56,13 +69,13 @@ class RCGroovyScenarioBuilder:
             test_plan_name=test_plan_name
         )
 
-        self.stages.append(run_tests_stage)
+        self.build_stages.append(run_tests_stage)
         self.logger.info(f"Run BDD tests with marks: {marks}")
 
     def save_groovy_file(self):
         groovy = render_template(
             template=BASE_GROOVY_TEMPLATE,
-            stages="\n".join((str(stage) for stage in self.stages))
+            stages="\n".join((str(stage) for stage in self.build_stages))
         )
 
         groovy_file_path = f"{SCENARIOS_DIR}/{self.scenario_date}.groovy"

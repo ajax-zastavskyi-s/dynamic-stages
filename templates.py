@@ -59,6 +59,15 @@ DEPLOY_SVC_TEMPLATE = Template("""
         ],
 """)
 
+PARALLEL_DEPLOY_TEMPLATE = Template("""
+    [
+        name: "$parallel_run_name"
+        parallel: {
+            
+        }
+    ]
+""")
+
 RUN_BDD_TESTS_TEMPLATE = Template("""
         [
             name: "$stage_name",
