@@ -53,7 +53,7 @@ def getStages() {
             }
         ],
         [
-            name: "Run BDD tests",
+            name: "Run BDD tests with marks: video",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
@@ -70,7 +70,7 @@ def getStages() {
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
-                            marks='Empty',
+                            marks='video',
                             test_plan_name='RC [Undefined]'
                         )
                     }
@@ -87,7 +87,7 @@ def getStages() {
             }
         ],
         [
-            name: "Run BDD tests",
+            name: "Run BDD tests with marks: smart_lock",
             steps: {
                 script {
                     dynamicStagesResults = getDynamicStagesResults()
@@ -104,7 +104,7 @@ def getStages() {
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
-                            marks='Empty',
+                            marks='smart_lock',
                             test_plan_name='RC [Undefined]'
                         )
                     }
