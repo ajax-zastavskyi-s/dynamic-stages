@@ -25,7 +25,7 @@ def getStages() {
                     dynamicStagesResults = getDynamicStagesResults()
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
-                        rc_testing.clearDatabases()
+                        rc_testing.deleteLockedObjects()
                         rc_testing.respawnActors()
                         dynamicStagesResults['setup_generation_passed'] = rc_testing.generateSetups()
                     }
@@ -59,7 +59,7 @@ def getStages() {
                     dynamicStagesResults = getDynamicStagesResults()
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
-                        rc_testing.clearDatabases()
+                        rc_testing.deleteLockedObjects()
                         rc_testing.respawnActors()
                         dynamicStagesResults['setup_generation_passed'] = rc_testing.generateSetups()
                     }
@@ -93,7 +93,7 @@ def getStages() {
                     dynamicStagesResults = getDynamicStagesResults()
 
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
-                        rc_testing.clearDatabases()
+                        rc_testing.deleteLockedObjects()
                         rc_testing.respawnActors()
                         dynamicStagesResults['setup_generation_passed'] = rc_testing.generateSetups()
                     }
