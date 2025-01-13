@@ -1,1 +1,1 @@
-{"scenarioName": "Test generation missing", "date": "1929-01-09", "stages": [{"name":"runTests","parameters":{"marks":[""]}}]}
+{"scenarioName": "Test generation missing", "date": "1929-01-09", "stages": [{"name":"runTests","parameters":{"marks":[]}}, {"name":"runTests","parameters":{"marks":[]}}]}
