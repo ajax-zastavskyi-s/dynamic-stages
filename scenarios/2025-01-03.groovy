@@ -19,56 +19,41 @@ def getStages() {
 
     return [
         [
-            name: "Deploy external-device-svc 1.36.1-306.RELEASE",
+            name: "Deploy communication-svc 1.64.0*.RELEASE| company-svc 1.90.0*.RELEASE| cloud-signaling-svc 1.100.0.*.RELEASE| a911-svc 1.121.0*.RELEASE| user-svc 1.23.0*.RELEASE| image-svc 1.24.0*.RELEASE",
             steps: {
                 script {
-                    dynamicStagesResults = getDynamicStagesResults()
-                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
-                        def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                            serviceName="external-device-svc",
-                            serviceVersionPattern="1.36.1-306.RELEASE"
-                        )
+                    parallel (
+                        
+                                "Deploy communication-svc 1.64.0*.RELEASE":{
+                                echo "DEPLOY communication-svc 1.64.0*.RELEASE"
+                                },
 
-                        dynamicStagesResults['deploy_external_device_svc_passed'] = rc_testing.deployService(
-                            serviceName="external-device-svc",
-                            serviceVersion=serviceVersionFromPattern,
-                            deploymentDestination="null",
-                        )
-                    }
-                    else {
-                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
-                        echo "Skip deploy due to failure: ${failedStage} == false"
-                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
-                    }
 
-                    env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                }
-            }
-        ],
-        [
-            name: "Deploy a911-svc 1.122.0-7660.MASTER-SNAPSHOT",
-            steps: {
-                script {
-                    dynamicStagesResults = getDynamicStagesResults()
-                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
-                        def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                            serviceName="a911-svc",
-                            serviceVersionPattern="1.122.0-7660.MASTER-SNAPSHOT"
-                        )
+                                "Deploy company-svc 1.90.0*.RELEASE":{
+                                echo "DEPLOY company-svc 1.90.0*.RELEASE"
+                                },
 
-                        dynamicStagesResults['deploy_a911_svc_passed'] = rc_testing.deployService(
-                            serviceName="a911-svc",
-                            serviceVersion=serviceVersionFromPattern,
-                            deploymentDestination="k8",
-                        )
-                    }
-                    else {
-                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
-                        echo "Skip deploy due to failure: ${failedStage} == false"
-                        Utils.markStageSkippedForConditional(env.STAGE_NAME)
-                    }
 
-                    env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
+                                "Deploy cloud-signaling-svc 1.100.0.*.RELEASE":{
+                                echo "DEPLOY cloud-signaling-svc 1.100.0.*.RELEASE"
+                                },
+
+
+                                "Deploy a911-svc 1.121.0*.RELEASE":{
+                                echo "DEPLOY a911-svc 1.121.0*.RELEASE"
+                                },
+
+
+                                "Deploy user-svc 1.23.0*.RELEASE":{
+                                echo "DEPLOY user-svc 1.23.0*.RELEASE"
+                                },
+
+
+                                "Deploy image-svc 1.24.0*.RELEASE":{
+                                echo "DEPLOY image-svc 1.24.0*.RELEASE"
+                                },
+
+                    )
                 }
             }
         ],
