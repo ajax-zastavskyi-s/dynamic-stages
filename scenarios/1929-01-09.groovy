@@ -22,11 +22,13 @@ def getStages() {
             name: "Deploy communication-svc 1.64.0*.RELEASE| company-svc 1.90.0*.RELEASE| cloud-signaling-svc 1.100.0.*.RELEASE| a911-svc 1.121.0*.RELEASE| user-svc 1.23.0*.RELEASE| image-svc 1.24.0*.RELEASE",
             steps: {
                 script {
+                    failFast true
                     parallel (
                         
                                 "Deploy communication-svc 1.64.0*.RELEASE":{
                                      sh("sleep 20")
-                                echo "DEPLOY communication-svc 1.64.0*.RELEASE"
+                                    throw new Exception("This is a custom error message")
+                                    echo "DEPLOY communication-svc 1.64.0*.RELEASE"
                                 },
 
 
