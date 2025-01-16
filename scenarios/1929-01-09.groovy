@@ -25,32 +25,20 @@ def getStages() {
                     parallel (
                         
                                 "Deploy communication-svc 1.64.0*.RELEASE":{
+                                     sh("sleep 20")
                                 echo "DEPLOY communication-svc 1.64.0*.RELEASE"
                                 },
 
 
                                 "Deploy company-svc 1.90.0*.RELEASE":{
+                                     sh("sleep 35")
                                 echo "DEPLOY company-svc 1.90.0*.RELEASE"
                                 },
 
 
                                 "Deploy cloud-signaling-svc 1.100.0.*.RELEASE":{
+                                     sh("sleep 10")
                                 echo "DEPLOY cloud-signaling-svc 1.100.0.*.RELEASE"
-                                },
-
-
-                                "Deploy a911-svc 1.121.0*.RELEASE":{
-                                echo "DEPLOY a911-svc 1.121.0*.RELEASE"
-                                },
-
-
-                                "Deploy user-svc 1.23.0*.RELEASE":{
-                                echo "DEPLOY user-svc 1.23.0*.RELEASE"
-                                },
-
-
-                                "Deploy image-svc 1.24.0*.RELEASE":{
-                                echo "DEPLOY image-svc 1.24.0*.RELEASE"
                                 },
 
                     )
