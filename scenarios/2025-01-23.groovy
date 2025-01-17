@@ -38,7 +38,7 @@ def getStages() {
                             )
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        }
+                        },
                         "facility-svc 1.37.1-988.RELEASE": {
                             dynamicStagesResults = getDynamicStagesResults()
 
@@ -54,7 +54,7 @@ def getStages() {
                             )
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        }
+                        },
                         "external-device-svc 1.38.0-322.RELEASE": {
                             dynamicStagesResults = getDynamicStagesResults()
 
@@ -70,7 +70,7 @@ def getStages() {
                             )
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        }
+                        },
                     )
                 }
             }
@@ -129,7 +129,7 @@ def getStages() {
                             )
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        }
+                        },
                         "telemetry-svc 1.13.0-170.RELEASE": {
                             dynamicStagesResults = getDynamicStagesResults()
 
@@ -145,7 +145,7 @@ def getStages() {
                             )
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        }
+                        },
                     )
                 }
             }
