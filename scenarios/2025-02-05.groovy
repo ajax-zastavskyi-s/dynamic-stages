@@ -85,7 +85,7 @@ def getStages() {
                         rc_testing.runBDDTests(
                             marks='Empty',
                             test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE]',
-                            chats_for_notification='accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE'
+                            chats_for_notification='[accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE]'
                         )
                     }
                     else {
@@ -186,7 +186,7 @@ def getStages() {
                         rc_testing.runBDDTests(
                             marks='Empty',
                             test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE]',
-                            chats_for_notification='space-svc 1.82.0-*.RELEASE'
+                            chats_for_notification='[space-svc 1.82.0-*.RELEASE]'
                         )
                     }
                     else {
@@ -306,7 +306,7 @@ def getStages() {
                         rc_testing.runBDDTests(
                             marks='Empty',
                             test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE | mobile-gw-svc 1.97.0-*.RELEASE]',
-                            chats_for_notification='mobile-gw-svc 1.97.0-*.RELEASE'
+                            chats_for_notification='[mobile-gw-svc 1.97.0-*.RELEASE]'
                         )
                     }
                     else {
@@ -445,7 +445,7 @@ def getStages() {
                         rc_testing.runBDDTests(
                             marks='Empty',
                             test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE | mobile-gw-svc 1.97.0-*.RELEASE | cloud-api-svc 0.48.0-*.RELEASE]',
-                            chats_for_notification='cloud-api-svc 0.48.0-*.RELEASE'
+                            chats_for_notification='[cloud-api-svc 0.48.0-*.RELEASE]'
                         )
                     }
                     else {
