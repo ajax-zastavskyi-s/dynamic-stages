@@ -84,12 +84,11 @@ def getStages() {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks='Empty',
-                            test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE]',
-                            chats_for_notification='[accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE]'
+                            test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE]'
                         )
                     }
                     else {
-                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key 
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
                         echo "Skip running BDD tests due to failure: ${failedStage} == false"
                         if (failedStage != "setup_generation_passed") {
                             Utils.markStageSkippedForConditional(env.STAGE_NAME)
@@ -101,48 +100,10 @@ def getStages() {
             }
         ],
         [
-            name: "Deploy accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE",
+            name: "Deploy space-svc 1.82.0-*.RELEASE",
             steps: {
                 script {
                     parallel (
-                        "accounting-svc 1.39.0-*.RELEASE": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="accounting-svc",
-                                serviceVersionPattern="1.39.0-*.RELEASE"
-                            )
-    
-                            dynamicStagesResults['deploy_accounting_svc_passed'] = rc_testing.deployService(
-                                serviceName="accounting-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="null",
-                            )
-                            if (dynamicStagesResults['deploy_accounting_svc_passed'] == false) {
-                                saveFailedDeploy("accounting-svc", "1.39.0-*.RELEASE")
-                            }
-        
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                        "video-svc 1.69.0-*.RELEASE": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="video-svc",
-                                serviceVersionPattern="1.69.0-*.RELEASE"
-                            )
-    
-                            dynamicStagesResults['deploy_video_svc_passed'] = rc_testing.deployService(
-                                serviceName="video-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="null",
-                            )
-                            if (dynamicStagesResults['deploy_video_svc_passed'] == false) {
-                                saveFailedDeploy("video-svc", "1.69.0-*.RELEASE")
-                            }
-        
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
                         "space-svc 1.82.0-*.RELEASE": {
                             dynamicStagesResults = getDynamicStagesResults()
 
@@ -150,7 +111,7 @@ def getStages() {
                                 serviceName="space-svc",
                                 serviceVersionPattern="1.82.0-*.RELEASE"
                             )
-    
+
                             dynamicStagesResults['deploy_space_svc_passed'] = rc_testing.deployService(
                                 serviceName="space-svc",
                                 serviceVersion=serviceVersionFromPattern,
@@ -159,7 +120,7 @@ def getStages() {
                             if (dynamicStagesResults['deploy_space_svc_passed'] == false) {
                                 saveFailedDeploy("space-svc", "1.82.0-*.RELEASE")
                             }
-        
+
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                         },
                     )
@@ -185,12 +146,11 @@ def getStages() {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks='Empty',
-                            test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE]',
-                            chats_for_notification='[space-svc 1.82.0-*.RELEASE]'
+                            test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE]'
                         )
                     }
                     else {
-                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key 
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
                         echo "Skip running BDD tests due to failure: ${failedStage} == false"
                         if (failedStage != "setup_generation_passed") {
                             Utils.markStageSkippedForConditional(env.STAGE_NAME)
@@ -202,67 +162,10 @@ def getStages() {
             }
         ],
         [
-            name: "Deploy accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE | mobile-gw-svc 1.97.0-*.RELEASE",
+            name: "Deploy mobile-gw-svc 1.97.0-*.RELEASE",
             steps: {
                 script {
                     parallel (
-                        "accounting-svc 1.39.0-*.RELEASE": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="accounting-svc",
-                                serviceVersionPattern="1.39.0-*.RELEASE"
-                            )
-    
-                            dynamicStagesResults['deploy_accounting_svc_passed'] = rc_testing.deployService(
-                                serviceName="accounting-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="null",
-                            )
-                            if (dynamicStagesResults['deploy_accounting_svc_passed'] == false) {
-                                saveFailedDeploy("accounting-svc", "1.39.0-*.RELEASE")
-                            }
-        
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                        "video-svc 1.69.0-*.RELEASE": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="video-svc",
-                                serviceVersionPattern="1.69.0-*.RELEASE"
-                            )
-    
-                            dynamicStagesResults['deploy_video_svc_passed'] = rc_testing.deployService(
-                                serviceName="video-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="null",
-                            )
-                            if (dynamicStagesResults['deploy_video_svc_passed'] == false) {
-                                saveFailedDeploy("video-svc", "1.69.0-*.RELEASE")
-                            }
-        
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                        "space-svc 1.82.0-*.RELEASE": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="space-svc",
-                                serviceVersionPattern="1.82.0-*.RELEASE"
-                            )
-    
-                            dynamicStagesResults['deploy_space_svc_passed'] = rc_testing.deployService(
-                                serviceName="space-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="null",
-                            )
-                            if (dynamicStagesResults['deploy_space_svc_passed'] == false) {
-                                saveFailedDeploy("space-svc", "1.82.0-*.RELEASE")
-                            }
-        
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
                         "mobile-gw-svc 1.97.0-*.RELEASE": {
                             dynamicStagesResults = getDynamicStagesResults()
 
@@ -270,7 +173,7 @@ def getStages() {
                                 serviceName="mobile-gw-svc",
                                 serviceVersionPattern="1.97.0-*.RELEASE"
                             )
-    
+
                             dynamicStagesResults['deploy_mobile_gw_svc_passed'] = rc_testing.deployService(
                                 serviceName="mobile-gw-svc",
                                 serviceVersion=serviceVersionFromPattern,
@@ -279,7 +182,7 @@ def getStages() {
                             if (dynamicStagesResults['deploy_mobile_gw_svc_passed'] == false) {
                                 saveFailedDeploy("mobile-gw-svc", "1.97.0-*.RELEASE")
                             }
-        
+
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                         },
                     )
@@ -305,12 +208,11 @@ def getStages() {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks='Empty',
-                            test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE | mobile-gw-svc 1.97.0-*.RELEASE]',
-                            chats_for_notification='[mobile-gw-svc 1.97.0-*.RELEASE]'
+                            test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE | mobile-gw-svc 1.97.0-*.RELEASE]'
                         )
                     }
                     else {
-                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key 
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
                         echo "Skip running BDD tests due to failure: ${failedStage} == false"
                         if (failedStage != "setup_generation_passed") {
                             Utils.markStageSkippedForConditional(env.STAGE_NAME)
@@ -322,86 +224,10 @@ def getStages() {
             }
         ],
         [
-            name: "Deploy accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE | mobile-gw-svc 1.97.0-*.RELEASE | cloud-api-svc 0.48.0-*.RELEASE",
+            name: "Deploy cloud-api-svc 0.48.0-*.RELEASE",
             steps: {
                 script {
                     parallel (
-                        "accounting-svc 1.39.0-*.RELEASE": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="accounting-svc",
-                                serviceVersionPattern="1.39.0-*.RELEASE"
-                            )
-    
-                            dynamicStagesResults['deploy_accounting_svc_passed'] = rc_testing.deployService(
-                                serviceName="accounting-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="null",
-                            )
-                            if (dynamicStagesResults['deploy_accounting_svc_passed'] == false) {
-                                saveFailedDeploy("accounting-svc", "1.39.0-*.RELEASE")
-                            }
-        
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                        "video-svc 1.69.0-*.RELEASE": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="video-svc",
-                                serviceVersionPattern="1.69.0-*.RELEASE"
-                            )
-    
-                            dynamicStagesResults['deploy_video_svc_passed'] = rc_testing.deployService(
-                                serviceName="video-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="null",
-                            )
-                            if (dynamicStagesResults['deploy_video_svc_passed'] == false) {
-                                saveFailedDeploy("video-svc", "1.69.0-*.RELEASE")
-                            }
-        
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                        "space-svc 1.82.0-*.RELEASE": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="space-svc",
-                                serviceVersionPattern="1.82.0-*.RELEASE"
-                            )
-    
-                            dynamicStagesResults['deploy_space_svc_passed'] = rc_testing.deployService(
-                                serviceName="space-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="null",
-                            )
-                            if (dynamicStagesResults['deploy_space_svc_passed'] == false) {
-                                saveFailedDeploy("space-svc", "1.82.0-*.RELEASE")
-                            }
-        
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                        "mobile-gw-svc 1.97.0-*.RELEASE": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="mobile-gw-svc",
-                                serviceVersionPattern="1.97.0-*.RELEASE"
-                            )
-    
-                            dynamicStagesResults['deploy_mobile_gw_svc_passed'] = rc_testing.deployService(
-                                serviceName="mobile-gw-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="null",
-                            )
-                            if (dynamicStagesResults['deploy_mobile_gw_svc_passed'] == false) {
-                                saveFailedDeploy("mobile-gw-svc", "1.97.0-*.RELEASE")
-                            }
-        
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
                         "cloud-api-svc 0.48.0-*.RELEASE": {
                             dynamicStagesResults = getDynamicStagesResults()
 
@@ -409,7 +235,7 @@ def getStages() {
                                 serviceName="cloud-api-svc",
                                 serviceVersionPattern="0.48.0-*.RELEASE"
                             )
-    
+
                             dynamicStagesResults['deploy_cloud_api_svc_passed'] = rc_testing.deployService(
                                 serviceName="cloud-api-svc",
                                 serviceVersion=serviceVersionFromPattern,
@@ -418,7 +244,7 @@ def getStages() {
                             if (dynamicStagesResults['deploy_cloud_api_svc_passed'] == false) {
                                 saveFailedDeploy("cloud-api-svc", "0.48.0-*.RELEASE")
                             }
-        
+
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                         },
                     )
@@ -444,8 +270,7 @@ def getStages() {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks='Empty',
-                            test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE | mobile-gw-svc 1.97.0-*.RELEASE | cloud-api-svc 0.48.0-*.RELEASE]',
-                            chats_for_notification='[cloud-api-svc 0.48.0-*.RELEASE]'
+                            test_plan_name='RC [accounting-svc 1.39.0-*.RELEASE | video-svc 1.69.0-*.RELEASE | space-svc 1.82.0-*.RELEASE | mobile-gw-svc 1.97.0-*.RELEASE | cloud-api-svc 0.48.0-*.RELEASE]'
                         )
                     }
                     else {
