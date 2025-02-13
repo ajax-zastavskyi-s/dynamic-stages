@@ -56,10 +56,10 @@ def getStages() {
                             dynamicStagesResults = getDynamicStagesResults()
 
                             dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] = rc_testing.restoreToggle(
-                                serviceName="a911-svc",
-                                featureFlagName="REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC",
-                                featureFlagState="True",
-                                additionalData="{'users': ''}"
+                                serviceName='a911-svc',
+                                featureFlagName='REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC',
+                                featureFlagState='True',
+                                additionalData='{"users": ""}'
                             )
                             if (dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] == false) {
                                 saveFailedDeploy("REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC", "a911-svc")
