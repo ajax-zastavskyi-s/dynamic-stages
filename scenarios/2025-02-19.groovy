@@ -47,7 +47,7 @@ def getStages() {
             }
         ],
         [
-            name: "Restore toggles ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM [a911-svc] | ENABLE_FALLBACK_ARM_PROCESSING_VIA_HUB_SVC [cloud-api-svc] | NotificationHandlingErrorRoute [communication-svc]",
+            name: "Restore toggles ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM [a911-svc] | ENABLE_FALLBACK_ARM_PROCESSING_VIA_HUB_SVC [cloud-api-svc] | PUBLISH_SPACE_ADDITIONAL_INFO_UPDATED_EVENT_AS_INTENT [a911-svc]",
             steps: {
                 script {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
@@ -82,17 +82,17 @@ def getStages() {
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                         },
-                        "NotificationHandlingErrorRoute [communication-svc]": {
+                        "PUBLISH_SPACE_ADDITIONAL_INFO_UPDATED_EVENT_AS_INTENT [a911-svc]": {
                             dynamicStagesResults = getDynamicStagesResults()
 
-                            dynamicStagesResults['restore_notificationhandlingerrorroute_passed'] = rc_testing.restoreToggle(
-                                serviceName='communication-svc',
-                                featureFlagName='NotificationHandlingErrorRoute',
+                            dynamicStagesResults['restore_publish_space_additional_info_updated_event_as_intent_passed'] = rc_testing.restoreToggle(
+                                serviceName='a911-svc',
+                                featureFlagName='PUBLISH_SPACE_ADDITIONAL_INFO_UPDATED_EVENT_AS_INTENT',
                                 featureFlagState='True',
-                                additionalData='{"config": "[\\n {\\n "expression", "\\n "team": "video"\\n }\\n]", "\\n {\\n "expression": "message is too big"}'
+                                additionalData='{}'
                             )
-                            if (dynamicStagesResults['restore_notificationhandlingerrorroute_passed'] == false) {
-                                saveFailedDeploy("NotificationHandlingErrorRoute", "communication-svc")
+                            if (dynamicStagesResults['restore_publish_space_additional_info_updated_event_as_intent_passed'] == false) {
+                                saveFailedDeploy("PUBLISH_SPACE_ADDITIONAL_INFO_UPDATED_EVENT_AS_INTENT", "a911-svc")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
