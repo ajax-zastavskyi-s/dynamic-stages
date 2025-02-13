@@ -47,14 +47,14 @@ def getStages() {
             }
         ],
         [
-            name: "Restore toggles amazing [a911-svc] | amazing [a911-svc]",
+            name: "Restore toggles amazing [a911-svc] | amazing-ff [a911-svc]",
             steps: {
                 script {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         parallel (
                         "amazing [a911-svc]": {
                             dynamicStagesResults = getDynamicStagesResults()
-    
+
                             dynamicStagesResults['restore_amazing_passed'] = rc_testing.restoreToggle(
                                 serviceName="a911-svc",
                                 featureFlagName="amazing",
@@ -64,20 +64,20 @@ def getStages() {
                             if (dynamicStagesResults['restore_amazing_passed'] == false) {
                                 saveFailedDeploy("amazing", "a911-svc")
                             }
-        
+
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                         },
-                        "amazing [a911-svc]": {
+                        "amazing-ff [a911-svc]": {
                             dynamicStagesResults = getDynamicStagesResults()
-    
-                            dynamicStagesResults['restore_amazing_passed'] = rc_testing.restoreToggle(
+
+                            dynamicStagesResults['restore_amazing_ff_passed'] = rc_testing.restoreToggle(
                                 serviceName="a911-svc",
-                                featureFlagName="amazing",
+                                featureFlagName="amazing-ff",
                                 featureFlagState="True",
                                 additionalData="{'cliend-id': '+'}"
                             )
-                            if (dynamicStagesResults['restore_amazing_passed'] == false) {
-                                saveFailedDeploy("amazing", "a911-svc")
+                            if (dynamicStagesResults['restore_amazing_ff_passed'] == false) {
+                                saveFailedDeploy("amazing-ff", "a911-svc")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
