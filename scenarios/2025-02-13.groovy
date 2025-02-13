@@ -47,37 +47,22 @@ def getStages() {
             }
         ],
         [
-            name: "Restore toggles amazing [a911-svc] | amazing-ff [a911-svc]",
+            name: "Restore toggles REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [a911-svc]",
             steps: {
                 script {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         parallel (
-                        "amazing [a911-svc]": {
+                        "REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [a911-svc]": {
                             dynamicStagesResults = getDynamicStagesResults()
 
-                            dynamicStagesResults['restore_amazing_passed'] = rc_testing.restoreToggle(
+                            dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] = rc_testing.restoreToggle(
                                 serviceName="a911-svc",
-                                featureFlagName="amazing",
+                                featureFlagName="REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC",
                                 featureFlagState="True",
-                                additionalData="{'cliend-id': '+'}"
+                                additionalData="{'users': ''}"
                             )
-                            if (dynamicStagesResults['restore_amazing_passed'] == false) {
-                                saveFailedDeploy("amazing", "a911-svc")
-                            }
-
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                        "amazing-ff [a911-svc]": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            dynamicStagesResults['restore_amazing_ff_passed'] = rc_testing.restoreToggle(
-                                serviceName="a911-svc",
-                                featureFlagName="amazing-ff",
-                                featureFlagState="True",
-                                additionalData="{'cliend-id': '+'}"
-                            )
-                            if (dynamicStagesResults['restore_amazing_ff_passed'] == false) {
-                                saveFailedDeploy("amazing-ff", "a911-svc")
+                            if (dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] == false) {
+                                saveFailedDeploy("REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC", "a911-svc")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
