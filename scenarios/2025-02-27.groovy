@@ -47,22 +47,22 @@ def getStages() {
             }
         ],
         [
-            name: "Restore toggles REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [None]",
+            name: "Restore toggles REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [a911-svc]",
             steps: {
                 script {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         parallel (
-                        "REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [None]": {
+                        "REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [a911-svc]": {
                             dynamicStagesResults = getDynamicStagesResults()
 
                             dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] = rc_testing.restoreToggle(
-                                serviceName='None',
+                                serviceName='a911-svc',
                                 featureFlagName='REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC',
                                 featureFlagState='True',
                                 additionalData='{"users": ""}'
                             )
                             if (dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] == false) {
-                                saveFailedDeploy("REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC", "None")
+                                saveFailedDeploy("REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC", "a911-svc")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
