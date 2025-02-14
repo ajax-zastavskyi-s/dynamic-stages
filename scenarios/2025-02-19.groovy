@@ -19,39 +19,26 @@ def getStages() {
 
     return [
         [
-            name: "Deploy csa 1.122.0-7660.MASTER-SNAPSHOT",
-            steps: {
-                script {
-                    parallel (
-                        "csa 1.122.0-7660.MASTER-SNAPSHOT": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="csa",
-                                serviceVersionPattern="1.122.0-7660.MASTER-SNAPSHOT"
-                            )
-
-                            dynamicStagesResults['deploy_csa_passed'] = rc_testing.deployService(
-                                serviceName="csa",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="k8",
-                            )
-                            if (dynamicStagesResults['deploy_csa_passed'] == false) {
-                                saveFailedDeploy("csa", "1.122.0-7660.MASTER-SNAPSHOT")
-                            }
-
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                    )
-                }
-            }
-        ],
-        [
-            name: "Restore toggles ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM [a911-svc] | ENABLE_FALLBACK_ARM_PROCESSING_VIA_HUB_SVC [cloud-api-svc] | PUBLISH_SPACE_ADDITIONAL_INFO_UPDATED_EVENT_AS_INTENT [a911-svc]",
+            name: "Restore toggles REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [csa] | ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM [a911-svc]",
             steps: {
                 script {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         parallel (
+                        "REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [csa]": {
+                            dynamicStagesResults = getDynamicStagesResults()
+
+                            dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] = rc_testing.restoreToggle(
+                                serviceName='csa',
+                                featureFlagName='REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC',
+                                featureFlagState='True',
+                                additionalData='{}'
+                            )
+                            if (dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] == false) {
+                                saveFailedDeploy("REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC", "csa")
+                            }
+
+                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
+                        },
                         "ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM [a911-svc]": {
                             dynamicStagesResults = getDynamicStagesResults()
 
@@ -63,36 +50,6 @@ def getStages() {
                             )
                             if (dynamicStagesResults['restore_add_service_state_to_hub_in_desktop_gw_space_stream_passed'] == false) {
                                 saveFailedDeploy("ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM", "a911-svc")
-                            }
-
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                        "ENABLE_FALLBACK_ARM_PROCESSING_VIA_HUB_SVC [cloud-api-svc]": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            dynamicStagesResults['restore_enable_fallback_arm_processing_via_hub_svc_passed'] = rc_testing.restoreToggle(
-                                serviceName='cloud-api-svc',
-                                featureFlagName='ENABLE_FALLBACK_ARM_PROCESSING_VIA_HUB_SVC',
-                                featureFlagState='False',
-                                additionalData='{"client-ids": ""}'
-                            )
-                            if (dynamicStagesResults['restore_enable_fallback_arm_processing_via_hub_svc_passed'] == false) {
-                                saveFailedDeploy("ENABLE_FALLBACK_ARM_PROCESSING_VIA_HUB_SVC", "cloud-api-svc")
-                            }
-
-                            env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
-                        },
-                        "PUBLISH_SPACE_ADDITIONAL_INFO_UPDATED_EVENT_AS_INTENT [a911-svc]": {
-                            dynamicStagesResults = getDynamicStagesResults()
-
-                            dynamicStagesResults['restore_publish_space_additional_info_updated_event_as_intent_passed'] = rc_testing.restoreToggle(
-                                serviceName='a911-svc',
-                                featureFlagName='PUBLISH_SPACE_ADDITIONAL_INFO_UPDATED_EVENT_AS_INTENT',
-                                featureFlagState='True',
-                                additionalData='{}'
-                            )
-                            if (dynamicStagesResults['restore_publish_space_additional_info_updated_event_as_intent_passed'] == false) {
-                                saveFailedDeploy("PUBLISH_SPACE_ADDITIONAL_INFO_UPDATED_EVENT_AS_INTENT", "a911-svc")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -124,7 +81,7 @@ def getStages() {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks='Empty',
-                            test_plan_name='RC [csa 1.122.0-7660.MASTER-SNAPSHOT]'
+                            test_plan_name='RC [Undefined]'
                         )
                     }
                     else {
