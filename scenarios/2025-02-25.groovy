@@ -66,21 +66,6 @@ def getStages() {
             }
         ],
         [
-            name: "Restore toggles ",
-            steps: {
-                script {
-                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
-                        parallel (
-
-                        )
-                    } else {
-                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
-                        echo "Skip restore toggles due to failure: ${failedStage} == false"
-                    }
-                }
-            }
-        ],
-        [
             name: "Run BDD tests",
             steps: {
                 script {
