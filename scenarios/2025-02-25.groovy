@@ -95,8 +95,7 @@ def getStages() {
                         rc_testing.runBDDTests(
                             marks='Empty',
                             test_plan_name='RC [csa 1.122.0-7660.MASTER-SNAPSHOT]',
-                            test_plan_description='RC Testing 
-Updated toggles: REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [cloud-signaling-svc]'
+                            test_plan_description='RC Testing. Updated toggles: REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [cloud-signaling-svc]'
                         )
                     }
                     else {
