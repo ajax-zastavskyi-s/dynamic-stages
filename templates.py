@@ -47,6 +47,7 @@ PARALLEL_RESTORE_TEMPLATE = Template("""
             name: "$stage_name",
             steps: {
                 script {
+                    dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         parallel (
 $parallel_toggles_setting
