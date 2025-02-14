@@ -43,9 +43,10 @@ class RCGroovyScenarioBuilder:
             stage_name = f"{stage_name} with marks: {marks}"
         else:
             marks = "Empty"
-
-        self._build_parallel_deployments_stage()
-        self._build_ff_stage()
+        if self.deployments:
+            self._build_parallel_deployments_stage()
+        if self.ff_toggles:
+            self._build_ff_stage()
 
         test_plan_name = "RC [Undefined]"
 
