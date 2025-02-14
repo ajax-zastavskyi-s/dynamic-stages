@@ -19,7 +19,7 @@ def getStages() {
 
     return [
         [
-            name: "Deploy csa 1.122.0-7660.MASTER-SNAPSHOT | a911-svc 1.70.0*.RELEASE",
+            name: "Deploy csa 1.122.0-7660.MASTER-SNAPSHOT",
             steps: {
                 script {
                     parallel (
@@ -42,26 +42,36 @@ def getStages() {
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                         },
-                        "a911-svc 1.70.0*.RELEASE": {
+                    )
+                }
+            }
+        ],
+        [
+            name: "Restore toggles REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [cloud-signaling-svc]",
+            steps: {
+                script {
+                    if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
+                        parallel (
+                        "REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [cloud-signaling-svc]": {
                             dynamicStagesResults = getDynamicStagesResults()
 
-                            def serviceVersionFromPattern = rc_testing.getLatestServiceVersionByPattern(
-                                serviceName="a911-svc",
-                                serviceVersionPattern="1.70.0*.RELEASE"
+                            dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] = rc_testing.setToggle(
+                                serviceName='cloud-signaling-svc',
+                                featureFlagName='REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC',
+                                featureFlagState='True',
+                                additionalData='{"users": ""}'
                             )
-
-                            dynamicStagesResults['deploy_a911_svc_passed'] = rc_testing.deployService(
-                                serviceName="a911-svc",
-                                serviceVersion=serviceVersionFromPattern,
-                                deploymentDestination="k8",
-                            )
-                            if (dynamicStagesResults['deploy_a911_svc_passed'] == false) {
-                                saveFailedStages("a911-svc", "1.70.0*.RELEASE")
+                            if (dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] == false) {
+                                saveFailedStages("REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC", "cloud-signaling-svc")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                         },
-                    )
+                        )
+                    } else {
+                        def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
+                        echo "Skip restore toggles due to failure: ${failedStage} == false"
+                    }
                 }
             }
         ],
@@ -84,8 +94,9 @@ def getStages() {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks='Empty',
-                            test_plan_name='RC [csa 1.122.0-7660.MASTER-SNAPSHOT | a911-svc 1.70.0*.RELEASE]',
-                            test_plan_description='RC Testing'
+                            test_plan_name='RC [csa 1.122.0-7660.MASTER-SNAPSHOT]',
+                            test_plan_description='RC Testing 
+Updated toggles: REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [cloud-signaling-svc]'
                         )
                     }
                     else {
