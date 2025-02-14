@@ -49,7 +49,7 @@ PARALLEL_RESTORE_TEMPLATE = Template("""
                 script {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         parallel (
-$parallel_deployments
+$parallel_toggles_setting
                         )
                     } else {
                         def failedStage = dynamicStagesResults.find { stage_passed -> stage_passed.value == false }?.key
@@ -123,7 +123,7 @@ SET_FF_TEMPLATE = Template("""
                         "$stage_name": {
                             dynamicStagesResults = getDynamicStagesResults()
 
-                            dynamicStagesResults['$stage_passed_variable'] = rc_testing.restoreToggle(
+                            dynamicStagesResults['$stage_passed_variable'] = rc_testing.setToggle(
                                 serviceName='$service_name',
                                 featureFlagName='$feature_flag_name',
                                 featureFlagState='$feature_flag_state',

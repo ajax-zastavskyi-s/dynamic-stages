@@ -63,6 +63,7 @@ class RCGroovyScenarioBuilder:
         self.stages.append(run_tests_stage)
         self.logger.info(f"Run BDD tests with marks: {marks}")
         self.deployments = []
+        self.ff_toggles = []
 
     def build_set_ff_stage(self, serviceName, featureFlagName, featureFlagState, additionalData="null"):
         stage_name = f"{featureFlagName} [{serviceName}]"
@@ -104,17 +105,17 @@ class RCGroovyScenarioBuilder:
     def _build_ff_stage(self):
         build_ff_stage = render_template(
             template=PARALLEL_RESTORE_TEMPLATE,
-            stage_name=f"Restore toggles {self.rc_restoring}",
-            parallel_deployments="\n".join([render_template(template=SET_FF_TEMPLATE, **toggle)
-                                            for toggle in self.ff_toggles])
+            stage_name=f"Restore toggles {self.rc_toggles}",
+            parallel_toggles_setting="\n".join([render_template(template=SET_FF_TEMPLATE, **toggle)
+                                                for toggle in self.ff_toggles])
         )
         self.stages.append(build_ff_stage)
-        self.logger.success(f"Restore {self.rc_restoring}")
+        self.logger.success(f"Set {self.rc_toggles}")
 
     @property
     def rc_deployments(self):
         return " | ".join([deploy['stage_name'] for deploy in self.deployments])
 
     @property
-    def rc_restoring(self):
+    def rc_toggles(self):
         return " | ".join([toggle['stage_name'] for toggle in self.ff_toggles])
