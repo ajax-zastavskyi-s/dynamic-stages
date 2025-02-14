@@ -10,11 +10,11 @@ def getStages() {
         return [:]
     }
 
-    def saveFailedDeploy = {service, version ->
-        def failedRCDeploys = env.failedRCDeploys ? env.failedRCDeploys.split(',').toList() : []
+    def saveFailedStages = {stage_name, stage_identifier ->
+        def failedRCStages = env.failedRCStages ? env.failedRCStages.split(',').toList() : []
 
-        failedRCDeploys.add("Deploy ${service} ${version}")
-        env.failedRCDeploys = failedRCDeploys.join(",")
+        failedRCStages.add("Stage ${stage_name} ${stage_identifier}")
+        env.failedRCStages = failedRCStages.join(",")
     }
 
     return [
@@ -37,7 +37,7 @@ def getStages() {
                                 deploymentDestination="k8",
                             )
                             if (dynamicStagesResults['deploy_csa_passed'] == false) {
-                                saveFailedDeploy("csa", "1.122.0-7660.MASTER-SNAPSHOT")
+                                saveFailedStages("csa", "1.122.0-7660.MASTER-SNAPSHOT")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -56,7 +56,7 @@ def getStages() {
                                 deploymentDestination="k8",
                             )
                             if (dynamicStagesResults['deploy_a911_svc_passed'] == false) {
-                                saveFailedDeploy("a911-svc", "1.70.0*.RELEASE")
+                                saveFailedStages("a911-svc", "1.70.0*.RELEASE")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -84,7 +84,8 @@ def getStages() {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks='Empty',
-                            test_plan_name='RC [csa 1.122.0-7660.MASTER-SNAPSHOT | a911-svc 1.70.0*.RELEASE]'
+                            test_plan_name='RC [csa 1.122.0-7660.MASTER-SNAPSHOT | a911-svc 1.70.0*.RELEASE]',
+                            test_plan_description='RC Testing'
                         )
                     }
                     else {
