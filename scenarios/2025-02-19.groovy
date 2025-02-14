@@ -10,11 +10,11 @@ def getStages() {
         return [:]
     }
 
-    def saveFailedDeploy = {service, version ->
-        def failedRCDeploys = env.failedRCDeploys ? env.failedRCDeploys.split(',').toList() : []
+    def saveFailedStages = {stage_name, stage_identifier ->
+        def failedRCStages = env.failedRCStages ? env.failedRCStages.split(',').toList() : []
 
-        failedRCDeploys.add("Deploy ${service} ${version}")
-        env.failedRCDeploys = failedRCDeploys.join(",")
+        failedRCStages.add("Stage ${stage_name} ${stage_identifier}")
+        env.failedRCStages = failedRCStages.join(",")
     }
 
     return [
@@ -22,19 +22,20 @@ def getStages() {
             name: "Restore toggles REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [csa] | ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM [a911-svc]",
             steps: {
                 script {
+                    dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         parallel (
                         "REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [csa]": {
                             dynamicStagesResults = getDynamicStagesResults()
 
-                            dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] = rc_testing.restoreToggle(
+                            dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] = rc_testing.setToggle(
                                 serviceName='csa',
                                 featureFlagName='REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC',
                                 featureFlagState='True',
                                 additionalData='{}'
                             )
                             if (dynamicStagesResults['restore_redirect_resend_confirmation_codes_to_user_svc_passed'] == false) {
-                                saveFailedDeploy("REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC", "csa")
+                                saveFailedStages("REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC", "csa")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -42,14 +43,14 @@ def getStages() {
                         "ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM [a911-svc]": {
                             dynamicStagesResults = getDynamicStagesResults()
 
-                            dynamicStagesResults['restore_add_service_state_to_hub_in_desktop_gw_space_stream_passed'] = rc_testing.restoreToggle(
+                            dynamicStagesResults['restore_add_service_state_to_hub_in_desktop_gw_space_stream_passed'] = rc_testing.setToggle(
                                 serviceName='a911-svc',
                                 featureFlagName='ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM',
                                 featureFlagState='True',
                                 additionalData='{}'
                             )
                             if (dynamicStagesResults['restore_add_service_state_to_hub_in_desktop_gw_space_stream_passed'] == false) {
-                                saveFailedDeploy("ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM", "a911-svc")
+                                saveFailedStages("ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM", "a911-svc")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -81,7 +82,8 @@ def getStages() {
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks='Empty',
-                            test_plan_name='RC [Undefined]'
+                            test_plan_name='RC [Undefined]',
+                            test_plan_description='RC Testing. Updated toggles: REDIRECT_RESEND_CONFIRMATION_CODES_TO_USER_SVC [csa] | ADD_SERVICE_STATE_TO_HUB_IN_DESKTOP_GW_SPACE_STREAM [a911-svc]'
                         )
                     }
                     else {
