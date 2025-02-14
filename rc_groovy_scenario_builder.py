@@ -49,15 +49,19 @@ class RCGroovyScenarioBuilder:
             self._build_ff_stage()
 
         test_plan_name = "RC [Undefined]"
+        test_plan_description = "RC Testing"
 
         if self.deployments:
             test_plan_name = f"RC [{' | '.join(self.deployed_services)}]"
+        if self.ff_toggles:
+            test_plan_description = f"RC Testing \nUpdated toggles: {self.rc_toggles}"
 
         run_tests_stage = render_template(
             template=RUN_BDD_TESTS_TEMPLATE,
             stage_name=stage_name,
             marks=marks,
-            test_plan_name=test_plan_name
+            test_plan_name=test_plan_name,
+            test_plan_description=test_plan_description,
         )
 
         self.stages.append(run_tests_stage)

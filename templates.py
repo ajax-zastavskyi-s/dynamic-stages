@@ -13,11 +13,11 @@ def getStages() {
         return [:]
     }
 
-    def saveFailedDeploy = {service, version ->
-        def failedRCDeploys = env.failedRCDeploys ? env.failedRCDeploys.split(',').toList() : []
+    def saveFailedStages = {stage_name, stage_identifier ->
+        def failedRCStages = env.failedRCStages ? env.failedRCStages.split(',').toList() : []
 
-        failedRCDeploys.add("Deploy ${service} ${version}")
-        env.failedRCDeploys = failedRCDeploys.join(",")
+        failedRCStages.add("Stage ${stage_name} ${stage_identifier}")
+        env.failedRCStages = failedRCStages.join(",")
     }
 
     return [
@@ -75,7 +75,7 @@ DEPLOY_SVC_TEMPLATE = Template("""
                                 deploymentDestination="$deployment_destination",
                             )
                             if (dynamicStagesResults['$stage_passed_variable'] == false) {
-                                saveFailedDeploy("$service_name", "$service_version")
+                                saveFailedStages("$service_name", "$service_version")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -102,7 +102,8 @@ RUN_BDD_TESTS_TEMPLATE = Template("""
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         rc_testing.runBDDTests(
                             marks='$marks',
-                            test_plan_name='$test_plan_name'
+                            test_plan_name='$test_plan_name',
+                            test_plan_description='$test_plan_description'
                         )
                     }
                     else {
@@ -130,7 +131,7 @@ SET_FF_TEMPLATE = Template("""
                                 additionalData='$additional_data'
                             )
                             if (dynamicStagesResults['$stage_passed_variable'] == false) {
-                                saveFailedDeploy("$feature_flag_name", "$service_name")
+                                saveFailedStages("$feature_flag_name", "$service_name")
                             }
 
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
