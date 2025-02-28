@@ -10,17 +10,10 @@ def getStages() {
         return [:]
     }
 
-    def saveFailedDeploys = {service_name, service_version ->
+    def saveFailedStages = {failedStageMessage ->
         def failedRCStages = env.failedRCStages ? env.failedRCStages.split(',').toList() : []
 
-        failedRCStages.add("Deploy service ${service_name} with version ${service_version}")
-        env.failedRCStages = failedRCStages.join(",")
-    }
-
-    def saveFailedToggles = {toggle_name, toggle_service ->
-        def failedRCStages = env.failedRCStages ? env.failedRCStages.split(',').toList() : []
-
-        failedRCStages.add("Set toggle ${toggle_name} on ${toggle_service}")
+        failedRCStages.add(failedStageMessage)
         env.failedRCStages = failedRCStages.join(",")
     }
 
@@ -44,7 +37,7 @@ def getStages() {
                                 deploymentDestination="null",
                             )
                             if (dynamicStagesResults['deploy_user_svc_passed'] == false) {
-                                saveFailedDeploys("user-svc", "1.32.0*.RELEASE")
+                                saveFailedStages("Deploy user-svc with version 1.32.0*.RELEASE")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -63,7 +56,7 @@ def getStages() {
                                 deploymentDestination="null",
                             )
                             if (dynamicStagesResults['deploy_a911_svc_passed'] == false) {
-                                saveFailedDeploys("a911-svc", "1.130.0*.RELEASE")
+                                saveFailedStages("Deploy a911-svc with version 1.130.0*.RELEASE")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -82,7 +75,7 @@ def getStages() {
                                 deploymentDestination="null",
                             )
                             if (dynamicStagesResults['deploy_cms_gw_svc_passed'] == false) {
-                                saveFailedDeploys("cms-gw-svc", "1.39.0*.RELEASE")
+                                saveFailedStages("Deploy cms-gw-svc with version 1.39.0*.RELEASE")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -101,7 +94,7 @@ def getStages() {
                                 deploymentDestination="null",
                             )
                             if (dynamicStagesResults['deploy_external_device_svc_passed'] == false) {
-                                saveFailedDeploys("external-device-svc", "1.43.0*.RELEASE")
+                                saveFailedStages("Deploy external-device-svc with version 1.43.0*.RELEASE")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -164,7 +157,7 @@ def getStages() {
                                 deploymentDestination="null",
                             )
                             if (dynamicStagesResults['deploy_cloud_signaling_svc_passed'] == false) {
-                                saveFailedDeploys("cloud-signaling-svc", "1.109.0*.RELEASE")
+                                saveFailedStages("Deploy cloud-signaling-svc with version 1.109.0*.RELEASE")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -227,7 +220,7 @@ def getStages() {
                                 deploymentDestination="null",
                             )
                             if (dynamicStagesResults['deploy_company_svc_passed'] == false) {
-                                saveFailedDeploys("company-svc", "1.98.0*.RELEASE")
+                                saveFailedStages("Deploy company-svc with version 1.98.0*.RELEASE")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -290,7 +283,7 @@ def getStages() {
                                 deploymentDestination="null",
                             )
                             if (dynamicStagesResults['deploy_communication_svc_passed'] == false) {
-                                saveFailedDeploys("communication-svc", "1.73.0*.RELEASE")
+                                saveFailedStages("Deploy communication-svc with version 1.73.0*.RELEASE")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
@@ -351,7 +344,7 @@ def getStages() {
                                 additionalData='{"pattern": "^(002714EE|002D02C8)"}'
                             )
                             if (dynamicStagesResults['restore_enable_processing_hub_command_queue_message_type_passed'] == false) {
-                                saveFailedToggles("ENABLE_PROCESSING_HUB_COMMAND_QUEUE_MESSAGE_TYPE", "a911-svc")
+                                saveFailedStages("Set toggle ENABLE_PROCESSING_HUB_COMMAND_QUEUE_MESSAGE_TYPE on a911-svc")
                             }
         
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
