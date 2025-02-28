@@ -1,0 +1,1 @@
+{"scenarioName": "hdt", "date": "2025-03-01", "stages": [{"name": "setFeatureFlag", "parameters": {"serviceName": "", "featureFlagName": "", "featureFlagState": false, "additionalData": {}}}, {"name": "deployService", "parameters": {"serviceName": "csa", "serviceVersion": "1.122.0-7660.MASTER-SNAPSHOT"}}, {"name": "runTests", "parameters": {"marks": []}}]}
