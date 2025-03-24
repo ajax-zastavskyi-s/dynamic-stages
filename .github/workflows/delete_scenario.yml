@@ -3,52 +3,63 @@ name: 🗑 Delete JSON and groovy scenarios for RC testing
 on:
   workflow_dispatch:
     inputs:
+      scenario_id:
+        description: 'Unique Scenario ID'
+        required: true
       scenario_date:
-        description: 'Date for scenario to be deleted. Unique identifier of scenario'
+        description: 'Date for scenario to be deleted'
         required: true
 
 env:
-  SCENARIO_ID: ${{ github.event.inputs.scenario_date }}
+  SCENARIO_ID: ${{ github.event.inputs.scenario_id }}
+  SCENARIO_DATE: ${{ github.event.inputs.scenario_date }}
 
 jobs:
   delete-scenario:
-    runs-on: ubuntu-latest
+    runs-on: "cloud-aqa-arm64-small"
+
+    permissions:
+      contents: write
+      pull-requests: write
 
     concurrency:
       group: "crud_rc_scenarios"
       cancel-in-progress: false
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Install git
+        run: sudo apt-get update && sudo apt-get install -y git
 
-    - name: Setup Github Action user
-      run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
+      - name: Load repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
+      - name: Setup Github Action user
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install -r requirements_prod.txt
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
 
-    - name: Delete JSON and groovy scenarios for $SCENARIO_ID"
-      run: |
-        rm json_scenarios/$SCENARIO_ID.json scenarios/$SCENARIO_ID.groovy
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements_generation.txt
 
-    - name: Push changes to repository
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git add json_scenarios scenarios
-        if git diff --cached --quiet; then
-          echo "No changes to commit."
-        else
-          git commit -m "Delete scenario for $SCENARIO_ID"
-          git push origin HEAD:master
-        fi
+      - name: Delete JSON and groovy scenarios for $SCENARIO_DATE/$SCENARIO_ID
+        run: |
+          rm json_scenarios/$SCENARIO_DATE/$SCENARIO_ID.json scenarios/$SCENARIO_DATE/$SCENARIO_ID.groovy
+
+      - name: Push changes to repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add json_scenarios scenarios
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Delete scenario for $SCENARIO_DATE/$SCENARIO_ID"
+            git push origin HEAD:master
+          fi

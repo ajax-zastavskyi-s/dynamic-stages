@@ -1,3 +1,4 @@
+import uuid
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -16,6 +17,7 @@ def mock_builder():
 @pytest.fixture
 def json_scenario():
     return {
+        "id": str(uuid.uuid4())[:8],
         "scenarioName": "TestScenario",
         "date": "2024-11-19",
         "stages": [

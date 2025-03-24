@@ -1,0 +1,1 @@
+{"id": "6da4aff1", "scenarioName": "a911 1.123", "date": "2025-01-10", "stages": [{"name": "deployService", "parameters": {"serviceName": "a911-svc", "serviceVersion": "1.123.0-*.RELEASE"}}, {"name": "runTests", "parameters": {"marks": []}}]}

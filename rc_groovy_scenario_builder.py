@@ -1,3 +1,5 @@
+import os.path
+
 from helpers import render_template
 from templates import (BASE_GROOVY_TEMPLATE, DEPLOY_SVC_TEMPLATE,
                        PARALLEL_DEPLOY_TEMPLATE, RUN_BDD_TESTS_TEMPLATE, SET_FF_TEMPLATE, PARALLEL_RESTORE_TEMPLATE)
@@ -6,7 +8,8 @@ SCENARIOS_DIR = "scenarios"
 
 
 class RCGroovyScenarioBuilder:
-    def __init__(self, scenario_name, scenario_date, logger):
+    def __init__(self, scenario_name, scenario_id, scenario_date, logger):
+        self.scenario_id = scenario_id
         self.scenario_name = scenario_name
         self.scenario_date = scenario_date
         self.stages = []
@@ -50,9 +53,15 @@ class RCGroovyScenarioBuilder:
 
         test_plan_name = "RC [Undefined]"
         test_plan_description = "RC Testing"
+        services = [service.replace("*.RELEASE", "") for service in self.deployed_services]
 
         if self.deployments:
-            test_plan_name = f"RC [{' | '.join(self.deployed_services)}]"
+            while True:
+                test_plan_name = f"RC [{' | '.join(services)}]"
+                if len(test_plan_name) <= 250:
+                    break
+                services.pop(0)
+
         if self.ff_toggles:
             test_plan_description = f"RC Testing. Updated toggles: {self.rc_toggles}"
 
@@ -88,7 +97,8 @@ class RCGroovyScenarioBuilder:
             stages="\n".join((str(stage) for stage in self.stages))
         )
 
-        groovy_file_path = f"{SCENARIOS_DIR}/{self.scenario_date}.groovy"
+        groovy_file_path = os.path.join(SCENARIOS_DIR, self.scenario_date, f"{self.scenario_id}.groovy")
+        os.makedirs(os.path.dirname(groovy_file_path), exist_ok=True)
 
         with open(groovy_file_path, "w") as f:
             f.write(groovy)
@@ -122,4 +132,5 @@ class RCGroovyScenarioBuilder:
 
     @property
     def rc_toggles(self):
-        return " | ".join([toggle['stage_name'] for toggle in self.ff_toggles])
+        return " | ".join([f"{toggle['stage_name']}: {'enabled' if toggle['feature_flag_state'] else 'disabled'}"
+                           for toggle in self.ff_toggles])

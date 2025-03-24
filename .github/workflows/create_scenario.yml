@@ -8,53 +8,62 @@ on:
         required: true
 
 env:
+  SCENARIO_ID: ${{ fromJson(github.event.inputs.scenario_data).id}}
   SCENARIO_DATE: ${{ fromJson(github.event.inputs.scenario_data).date}}
   SCENARIO_DATA: '${{ github.event.inputs.scenario_data }}'
 
 jobs:
   create-scenario:
-    runs-on: ubuntu-latest
+    runs-on: "cloud-aqa-arm64-small"
+
+    permissions:
+      contents: write
+      pull-requests: write
 
     concurrency:
       group: "crud_rc_scenarios"
       cancel-in-progress: false
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Install git
+        run: sudo apt-get update && sudo apt-get install -y git
 
-    - name: Setup Github Action user
-      run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
+      - name: Load repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
+      - name: Setup Github Action user
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install -r requirements_prod.txt
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
 
-    - name: Save JSON scenario
-      run: |
-        echo $SCENARIO_DATA > json_scenarios/$SCENARIO_DATE.json
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements_generation.txt
 
-    - name: Generate groovy file from scenario representation in JSON format
-      run: |
-        python generate_groovy_scenario.py --json_scenario_path=json_scenarios/$SCENARIO_DATE.json
+      - name: Save JSON scenario
+        run: |
+          mkdir -p json_scenarios/$SCENARIO_DATE
+          echo $SCENARIO_DATA > json_scenarios/$SCENARIO_DATE/$SCENARIO_ID.json
 
-    - name: Push changes to repository
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git add json_scenarios scenarios
+      - name: Generate groovy file from scenario representation in JSON format
+        run: |
+          python generate_groovy_scenario.py --json_scenario_path=json_scenarios/$SCENARIO_DATE/$SCENARIO_ID.json
 
-        if git diff --cached --quiet; then
-          echo "No changes to commit."
-        else
-          git commit -m "Create scenario for $SCENARIO_DATE"
-          git push origin HEAD:master
-        fi
+      - name: Push changes to repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add json_scenarios scenarios
+          
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Create scenario for $SCENARIO_DATE"
+            git push origin HEAD:master
+          fi

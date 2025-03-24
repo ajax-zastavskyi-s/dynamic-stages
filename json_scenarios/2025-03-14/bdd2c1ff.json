@@ -1,0 +1,1 @@
+{"id": "bdd2c1ff", "scenarioName": "Monday odd release(17032025)", "date": "2025-03-14", "stages": [{"name": "deployService", "parameters": {"serviceName": "a911-svc", "serviceVersion": "1.132.0*.RELEASE", "deploymentDestination": "ec2"}}, {"name": "runTests", "parameters": {"marks": []}}]}

@@ -4,7 +4,7 @@ BASE_GROOVY_TEMPLATE = Template("""
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
 def getStages() {
-    rc_testing = load("rollout_stage/jenkins/rc_testing.groovy")
+    def rc_testing = load("rollout_stage/jenkins/rc_testing.groovy")
 
     def getDynamicStagesResults = {
         if (env.dynamicStagesResults) {
@@ -13,10 +13,10 @@ def getStages() {
         return [:]
     }
 
-    def saveFailedStages = {stage_name, stage_identifier ->
+    def saveFailedStages = {failedStageMessage ->
         def failedRCStages = env.failedRCStages ? env.failedRCStages.split(',').toList() : []
 
-        failedRCStages.add("Stage ${stage_name} ${stage_identifier}")
+        failedRCStages.add(failedStageMessage)
         env.failedRCStages = failedRCStages.join(",")
     }
 
@@ -47,7 +47,7 @@ PARALLEL_RESTORE_TEMPLATE = Template("""
             name: "$stage_name",
             steps: {
                 script {
-                    dynamicStagesResults = getDynamicStagesResults()
+                    def dynamicStagesResults = getDynamicStagesResults()
                     if (dynamicStagesResults.every { stage_passed -> stage_passed.value == true }) {
                         parallel (
 $parallel_toggles_setting
@@ -69,16 +69,16 @@ DEPLOY_SVC_TEMPLATE = Template("""
                                 serviceName="$service_name",
                                 serviceVersionPattern="$service_version"
                             )
-
+    
                             dynamicStagesResults['$stage_passed_variable'] = rc_testing.deployService(
                                 serviceName="$service_name",
                                 serviceVersion=serviceVersionFromPattern,
                                 deploymentDestination="$deployment_destination",
                             )
                             if (dynamicStagesResults['$stage_passed_variable'] == false) {
-                                saveFailedStages("$service_name", "$service_version")
+                                saveFailedStages("Deploy ${service_name} with version ${service_version}")
                             }
-
+        
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                         },
 """)
@@ -124,7 +124,7 @@ RUN_BDD_TESTS_TEMPLATE = Template("""
 SET_FF_TEMPLATE = Template("""
                         "$stage_name": {
                             dynamicStagesResults = getDynamicStagesResults()
-
+    
                             dynamicStagesResults['$stage_passed_variable'] = rc_testing.setToggle(
                                 serviceName='$service_name',
                                 featureFlagName='$feature_flag_name',
@@ -132,9 +132,9 @@ SET_FF_TEMPLATE = Template("""
                                 additionalData='$additional_data'
                             )
                             if (dynamicStagesResults['$stage_passed_variable'] == false) {
-                                saveFailedStages("$feature_flag_name", "$service_name")
+                                saveFailedStages("Set toggle ${feature_flag_name} on ${service_name}")
                             }
-
+        
                             env.dynamicStagesResults = groovy.json.JsonOutput.toJson(dynamicStagesResults)
                         },
 """)

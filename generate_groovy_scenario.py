@@ -8,6 +8,7 @@ from loguru import logger as LoguruLogger
 
 def generate_groovy_file(json_scenario: dict, logger: LoguruLogger):
     builder = RCGroovyScenarioBuilder(
+        scenario_id=json_scenario["id"],
         scenario_name=json_scenario["scenarioName"],
         scenario_date=json_scenario["date"],
         logger=logger,
@@ -18,6 +19,7 @@ def generate_groovy_file(json_scenario: dict, logger: LoguruLogger):
         builder_method(**stage["parameters"])
 
     builder.save_groovy_file()
+
 
 def main():
     parser = argparse.ArgumentParser()
