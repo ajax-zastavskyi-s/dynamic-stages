@@ -20,7 +20,7 @@ env:
 
 jobs:
   update-scenario:
-    runs-on: "cloud-aqa-arm64-small"
+    runs-on: "ubuntu-latest"
 
     permissions:
       contents: write
