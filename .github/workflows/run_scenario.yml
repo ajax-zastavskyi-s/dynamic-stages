@@ -1,0 +1,40 @@
+name: Run RC Scenario
+
+on:
+  workflow_dispatch:
+    inputs:
+      RC_DATE:
+        description: "Date for the Release Candidate (RC) (YYYY-MM-DD)"
+        required: true
+      NOTIFY_ABOUT_ROLLOUT_STATUS:
+        description: "Send notification about rollout status (true/false)"
+        required: true
+        type: boolean
+        default: true
+      RUN_RC_SCENARIO:
+        description: "Run RC Scenario (true/false)"
+        required: true
+        type: boolean
+        default: true
+      RC_SCENARIO_IDS:
+        description: "Comma-separated list of RC Scenario IDs"
+        required: true
+      RUN_FROM_WINNIE:
+        description: "Job triggered by Winnie"
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  trigger-jenkins:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Trigger Jenkins Job
+        run: |
+          curl -X POST "https://jenkins.stage-internal.ajax.systems/view/CSA-QA/job/CSA_QA/job/UTILS/job/ROLLOUT_STAGE_ARC_WITH_TESTS/buildWithParameters" \
+          --user "mahdenko.v@ajax.systems:${{ secrets.JENKINS_API_TOKEN }}" \
+          --data-urlencode "RC_DATE=${{ github.event.inputs.RC_DATE }}" \
+          --data-urlencode "RUN_FROM_WINNIE=${{ github.event.inputs.ROLLOUT_STAGE == 'true' }}" \
+          --data-urlencode "NOTIFY_ABOUT_ROLLOUT_STATUS=${{ github.event.inputs.NOTIFY_ABOUT_ROLLOUT_STATUS == 'true' }}" \
+          --data-urlencode "RUN_RC_SCENARIO=${{ github.event.inputs.RUN_RC_SCENARIO == 'true' }}" \
+          --data-urlencode "RC_SCENARIO_IDS=${{ github.event.inputs.RC_SCENARIO_IDS }}"
