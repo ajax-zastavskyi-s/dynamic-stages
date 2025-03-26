@@ -31,8 +31,7 @@ jobs:
     steps:
       - name: Trigger Jenkins Job
         run: |
-          curl -X POST "https://jenkins.stage-internal.ajax.systems/view/CSA-QA/job/CSA_QA/job/UTILS/job/ROLLOUT_STAGE_ARC_WITH_TESTS/buildWithParameters" \
-          --user "mahdenko.v@ajax.systems:${{ secrets.JENKINS_API_TOKEN }}" \
+          curl -X POST "https://jenkins.stage-internal.ajax.systems/view/CSA-QA/job/CSA_QA/job/UTILS/job/TEST_ROLLOUT_STAGE_ARC_WITH_TESTS/buildWithParameters?token=${{ secrets.JENKINS_API_TOKEN }}" \
           --data-urlencode "RC_DATE=${{ github.event.inputs.RC_DATE }}" \
           --data-urlencode "RUN_FROM_WINNIE=${{ github.event.inputs.ROLLOUT_STAGE == 'true' }}" \
           --data-urlencode "NOTIFY_ABOUT_ROLLOUT_STATUS=${{ github.event.inputs.NOTIFY_ABOUT_ROLLOUT_STATUS == 'true' }}" \
