@@ -1,0 +1,42 @@
+name: 🏹 On pull request
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  on_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 👓 Run linter for changed python files
+        if: ${{ !cancelled() }}
+        run: |
+          echo "Run linter"
+
+      - name: 🩺 Run integrity check
+        if: ${{ !cancelled() }}
+        run: |
+          echo "Run integrity check"
+
+      - name: 🤹 Run integration tests
+        if: ${{ !cancelled() }}
+        run: |
+          echo "Run integration tests"
+
+      - name: 🤹 Run unit tests
+        if: ${{ !cancelled() }}
+        run: |
+          echo "Run unit tests"
+
+      - name: 🤹 Check coverage of new Python files
+        if: ${{ !cancelled() }}
+        run: |
+          echo "Check coverage"
+
+      - name: 📝 Generate Sphinx documentation
+        if: ${{ !cancelled() }}
+        run: |
+          echo "Generate docs"
