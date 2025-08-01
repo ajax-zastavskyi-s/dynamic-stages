@@ -1,0 +1,37 @@
+name: Detect Changed Folders and Formats
+description: Outputs changed folders and formats between two commits
+inputs:
+  base:
+    description: 'Base commit SHA or ref'
+    required: true
+  head:
+    description: 'Head commit SHA or ref'
+    required: true
+
+outputs:
+  changed_folders:
+    description: 'Changed top-level folders (comma-separated)'
+    value: ${{ steps.detect_changes.outputs.changed_folders }}
+  changed_formats:
+    description: 'CSV of changed file extensions'
+    value: ${{ steps.detect_changes.outputs.changed_formats }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: detect_changes
+      shell: bash
+      run: |
+        BASE="${{ inputs.base }}"
+        HEAD="${{ inputs.head }}"
+
+        CHANGED_FILES=$(git diff --name-only "$BASE" "$HEAD")
+
+        # Get top-level folders CSV
+        CHANGED_FOLDERS=$(echo "$CHANGED_FILES" | grep '/' | cut -d/ -f1 | sort -u | tr '\n' ',' | sed 's/,$//')
+
+        # Get file extensions CSV
+        FORMATS=$(echo "$CHANGED_FILES" | grep '\.' | rev | cut -d. -f1 | rev | tr '[:upper:]' '[:lower:]' | sort -u | tr '\n' ',' | sed 's/,$//')
+
+        echo "changed_folders=$CHANGED_FOLDERS" >> $GITHUB_OUTPUT
+        echo "changed_formats=$FORMATS" >> $GITHUB_OUTPUT

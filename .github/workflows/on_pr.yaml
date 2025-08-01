@@ -1,0 +1,89 @@
+name: 🏹 On pull request
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  on_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed to check full git history/diffs
+
+      - name: Filter file changes
+        id: filtered_changes
+        uses: dorny/paths-filter@v3
+        with:
+          list-files: shell
+          filters: |
+            python:
+              - '**/*.py'
+            tests_dir:
+              - 'tests/**'
+            steps_dir:
+              - 'steps/**'
+            core_dir:
+              - 'core/**'
+
+      - name: 👓 Run linter for changed python files
+        if: ${{ !cancelled() && steps.filtered_changes.outputs.python == 'true'}}
+        run: |
+          echo "Run linter"
+
+      - name: 🩺 Run integrity check
+        if: >-
+          ${{ 
+            !cancelled() && (
+              steps.filtered_changes.outputs.tests_dir == 'true' ||
+              steps.filtered_changes.outputs.steps_dir == 'true'
+            )
+          }}
+        run: |
+          echo "Run integrity check"
+
+      - name: 🤹 Run integration tests
+        if: >-
+          ${{
+            !cancelled() && (
+              steps.filtered_changes.outputs.python == 'true' &&
+              !startsWith(steps.filtered_changes.outputs.python_files, 'tests/')
+            )
+          }}
+        run: |
+          echo "Run integration tests"
+
+      - name: 🤹 Run unit tests
+        if: >-
+          ${{
+            !cancelled() && (
+              steps.filtered_changes.outputs.python == 'true' &&
+              !startsWith(steps.filtered_changes.outputs.python_files, 'tests/')
+            )
+          }}
+        run: |
+          echo "Run unit tests"
+
+      - name: 🤹 Check coverage of new Python files
+        if: >-
+          ${{
+            !cancelled() && (
+              steps.filtered_changes.outputs.python == 'true' &&
+              !startsWith(steps.filtered_changes.outputs.python_files, 'tests/')
+            )
+          }}
+        run: |
+          echo "Check coverage"
+
+      - name: 📝 Generate Sphinx documentation
+        if: >-
+          ${{
+            !cancelled() && (
+              steps.filtered_changes.outputs.core_dir == 'true' ||
+              steps.filtered_changes.outputs.steps_dir == 'true'
+            )
+          }}
+        run: |
+          echo "Generate docs"
