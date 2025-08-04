@@ -21,6 +21,8 @@ jobs:
           filters: |
             python:
               - '**/*.py'
+            feature:
+              - '**/*.feature'
             tests_dir:
               - 'tests/**'
             steps_dir:
@@ -37,8 +39,8 @@ jobs:
         if: >-
           ${{ 
             !cancelled() && (
-              steps.filtered_changes.outputs.tests_dir == 'true' ||
-              steps.filtered_changes.outputs.steps_dir == 'true'
+              steps.filtered_changes.outputs.python == 'true' ||
+              steps.filtered_changes.outputs.feature == 'true'}}
             )
           }}
         run: |
