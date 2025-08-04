@@ -40,7 +40,7 @@ jobs:
           ${{ 
             !cancelled() && (
               steps.filtered_changes.outputs.python == 'true' ||
-              steps.filtered_changes.outputs.feature == 'true'}}
+              steps.filtered_changes.outputs.feature == 'true'
             )
           }}
         run: |
