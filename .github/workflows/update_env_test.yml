@@ -19,7 +19,7 @@ jobs:
         run: sudo apt update; sudo apt install curl -y
 
       - name: Update env
-        run: curl -s -v -X GET "https://free.mockerapi.com/200" --output update_env.log
+        run: curl -s -v -X GET "https://free.mockerapi.com/500" --output update_env.log
 
       - name: Archive logs
         uses: actions/upload-artifact@v4
