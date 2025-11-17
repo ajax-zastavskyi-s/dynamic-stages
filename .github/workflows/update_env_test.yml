@@ -1,0 +1,28 @@
+name: 🔄 Update env
+
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        description: 'Winnie-svc host'
+        required: false
+        type: string
+        default: "https://winnie-svc.infra-internal.ajax.systems"
+
+jobs:
+  build:
+    runs-on: 'cloud-aqa-amd64-small'
+    env:
+      HOST: ${{ github.event.inputs.host || 'https://winnie-svc.infra-internal.ajax.systems' }}
+    steps:
+      - name: Install curl
+        run: sudo apt update; sudo apt install curl -y
+
+      - name: Update env
+        run: curl -s -v -X GET "https://free.mockerapi.com/200" --output update_env.log
+
+      - name: Archive logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: update_env
+          path: update_env.log
