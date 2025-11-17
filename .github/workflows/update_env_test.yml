@@ -9,7 +9,7 @@ on:
         type: string
         default: "https://winnie-svc.infra-internal.ajax.systems"
   schedule:
-    - cron: "*/5 * * * 1-5"
+    - cron: "*/5 * * * *"
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
 
       - name: Update env
         run: |
-          STATUS_CODE=$(curl -s -v -w "%{http_code}" -X POST "https://free.mockerapi.com/500" --output update_env.log)
+          STATUS_CODE=$(curl -s -v -w "%{http_code}" -X POST "$HOST/api/env_update" --output update_env.log)
           echo "STATUS_CODE=$STATUS_CODE" >> $GITHUB_ENV
 
       - name: Archive logs
@@ -30,7 +30,6 @@ jobs:
         with:
           name: update_env
           path: update_env.log
-
 
       - name: Check update env result
         run: |
