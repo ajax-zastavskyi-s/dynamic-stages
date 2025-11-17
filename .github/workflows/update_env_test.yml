@@ -8,21 +8,33 @@ on:
         required: false
         type: string
         default: "https://winnie-svc.infra-internal.ajax.systems"
+  schedule:
+    - cron: "*/5 * * * 1-5"
 
 jobs:
   build:
     runs-on: 'ubuntu-latest'
     env:
-      HOST: ${{ github.event.inputs.host || 'https://winnie-svc.infra-internal.ajax.systems' }}
+      HOST: ${{ github.event.inputs.host }}
     steps:
       - name: Install curl
         run: sudo apt update; sudo apt install curl -y
 
       - name: Update env
-        run: curl -s -v -X GET "https://free.mockerapi.com/500" --output update_env.log
+        run: |
+          STATUS_CODE=$(curl -s -v -w "%{http_code}" -X POST "https://free.mockerapi.com/500" --output update_env.log)
+          echo "STATUS_CODE=$STATUS_CODE" >> $GITHUB_ENV
 
       - name: Archive logs
         uses: actions/upload-artifact@v4
         with:
           name: update_env
           path: update_env.log
+
+
+      - name: Check update env result
+        run: |
+          if [ "$STATUS_CODE" -ne 200 ]; then
+            echo "Update env for $HOST failed with status code $STATUS_CODE"
+            exit 1
+          fi
