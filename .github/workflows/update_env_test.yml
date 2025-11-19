@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'main'
+      - 'master'
 
 #    inputs:
 #      host:
@@ -19,11 +19,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Split secret by newline and export
-        env:
-          ALL_ENV_VARS: ${{ secrets.AES_KEYS }}
+      - name: Split multiline secret and export env vars
         run: |
-          echo "AES_KEYS" | while IFS= read -r line; do
-            echo "Exporting $line"
+          # Save the secret into a file
+
+          while IFS= read -r line; do
+            [[ -z "$line" || "$line" =~ ^# ]] && continue
+            
+            export "$line"
+
             echo "$line" >> $GITHUB_ENV
-          done
+          done < "${{ secrets.AES_KEYS }}"
+
+      - name: Use var
+        run: |
+          echo $STAGE_AES_KEY
+        
