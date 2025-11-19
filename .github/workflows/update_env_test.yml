@@ -2,38 +2,28 @@ name: 🔄 Update env
 
 on:
   workflow_dispatch:
-    inputs:
-      host:
-        description: 'Winnie-svc host'
-        required: false
-        type: string
-        default: "https://winnie-svc.infra-internal.ajax.systems"
-  schedule:
-    - cron: "*/5 * * * *"
+  push:
+    branches:
+      - 'main'
+
+#    inputs:
+#      host:
+#        description: 'Winnie-svc host'
+#        required: false
+#        type: string
+#        default: "https://winnie-svc.infra-internal.ajax.systems"
+#  schedule:
+#    - cron: "*/5 * * * *"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      HOST: ${{ github.event.inputs.host }}
     steps:
-      - name: Install curl
-        run: sudo apt update; sudo apt install curl -y
-
-      - name: Update env
+      - name: Split secret by newline and export
+        env:
+          ALL_ENV_VARS: ${{ secrets.AES_KEYS }}
         run: |
-          STATUS_CODE=$(curl -s -v -w "%{http_code}" -X POST "$HOST/api/env_update" --output update_env.log)
-          echo "STATUS_CODE=$STATUS_CODE" >> $GITHUB_ENV
-
-      - name: Archive logs
-        uses: actions/upload-artifact@v4
-        with:
-          name: update_env
-          path: update_env.log
-
-      - name: Check update env result
-        run: |
-          if [ "$STATUS_CODE" -ne 200 ]; then
-            echo "Update env for $HOST failed with status code $STATUS_CODE"
-            exit 1
-          fi
+          echo "AES_KEYS" | while IFS= read -r line; do
+            echo "Exporting $line"
+            echo "$line" >> $GITHUB_ENV
+          done
